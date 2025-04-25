@@ -13,7 +13,15 @@ const ProfilePage = () => {
   const { currentUser, getAthleteBadges } = useApp();
   
   if (!currentUser) {
-    return <MainLayout />;
+    // Pass a React element as children for unauthenticated state
+    return (
+      <MainLayout>
+        <div className="text-center p-8">
+          <h1 className="text-4xl font-bold mb-4">Welcome to PLAY BJJ</h1>
+          <p className="text-xl">Please log in to continue</p>
+        </div>
+      </MainLayout>
+    );
   }
   
   const isAthlete = currentUser.role === 'athlete';
