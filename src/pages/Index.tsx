@@ -1,8 +1,7 @@
-
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Award, Calendar, Journal } from "lucide-react";
+import { Trophy, Award, Calendar, Notebook } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import ChallengesList from "@/components/challenges/ChallengesList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -65,7 +64,7 @@ const Index = () => {
             <StatCard 
               title="Journal Entries" 
               value={3} 
-              icon={<Journal className="h-4 w-4" />} 
+              icon={<Notebook className="h-4 w-4" />} 
             />
           </div>
         )}

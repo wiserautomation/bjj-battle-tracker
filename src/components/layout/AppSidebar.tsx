@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { Athlete, School } from "@/types";
 import { 
@@ -15,7 +14,7 @@ import {
   SidebarMenuButton
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Trophy, Journal, User, Users } from "lucide-react";
+import { Calendar, Trophy, Notebook, User, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AppSidebar = () => {
@@ -72,7 +71,7 @@ const AppSidebar = () => {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Link to="/journal" className="flex items-center gap-3">
-                      <Journal className="h-5 w-5" />
+                      <Notebook className="h-5 w-5" />
                       <span>Journal</span>
                     </Link>
                   </SidebarMenuButton>

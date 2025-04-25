@@ -1,7 +1,6 @@
-
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Journal } from "lucide-react";
+import { Notebook } from "lucide-react";
 import { Athlete } from "@/types";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ const RecentJournalEntries = () => {
     <Card className="h-full flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-md font-medium flex items-center gap-2">
-          <Journal className="h-4 w-4" />
+          <Notebook className="h-4 w-4" />
           Recent Journal Entries
         </CardTitle>
         <Link to="/journal">
