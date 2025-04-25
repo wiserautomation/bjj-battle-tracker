@@ -3,6 +3,12 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 import { Athlete, Badge, Challenge, ChallengeResult, JournalEntry, School, User } from '../types';
 import { mockDataService } from '../services/mockData';
 
+interface LogAchievementParams {
+  challengeId: string;
+  count: number;
+  notes?: string;
+}
+
 interface AppContextType {
   currentUser: User | null;
   loading: boolean;
@@ -21,6 +27,7 @@ interface AppContextType {
   getJournalEntriesByAthlete: (athleteId: string) => JournalEntry[];
   getBadges: () => Badge[];
   getAthleteBadges: (athleteId: string) => Badge[];
+  logChallengeAchievement: (params: LogAchievementParams) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -28,6 +35,17 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(mockDataService.getCurrentUser());
   const [loading, setLoading] = useState(false);
+
+  const logChallengeAchievement = ({ challengeId, count, notes }: LogAchievementParams) => {
+    if (!currentUser || currentUser.role !== 'athlete') return;
+    
+    return mockDataService.logChallengeAchievement({
+      challengeId,
+      athleteId: currentUser.id,
+      count,
+      notes,
+    });
+  };
 
   const value = {
     currentUser,
@@ -47,6 +65,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     getJournalEntriesByAthlete: mockDataService.getJournalEntriesByAthlete,
     getBadges: mockDataService.getBadges,
     getAthleteBadges: mockDataService.getAthleteBadges,
+    logChallengeAchievement,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

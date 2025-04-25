@@ -1,4 +1,3 @@
-
 import { Athlete, Badge, Challenge, ChallengeResult, JournalEntry, School, User } from "../types";
 
 export const mockSchools: School[] = [
@@ -320,7 +319,13 @@ export const mockBadges: Badge[] = [
   }
 ];
 
-// Mock service to get data
+interface LogAchievementParams {
+  challengeId: string;
+  athleteId: string;
+  count: number;
+  notes?: string;
+}
+
 export const mockDataService = {
   getCurrentUser: (): User => mockAthletes[0],
   
@@ -361,5 +366,31 @@ export const mockDataService = {
     const athlete = mockAthletes.find(a => a.id === athleteId);
     if (!athlete) return [];
     return mockBadges.filter(badge => athlete.achievements.includes(badge.id));
+  },
+  
+  logChallengeAchievement: ({ challengeId, athleteId, count, notes }: LogAchievementParams): ChallengeResult => {
+    const challenge = mockChallenges.find(c => c.id === challengeId);
+    if (!challenge) throw new Error('Challenge not found');
+    
+    const points = challenge.pointsSystem.type === 'count' 
+      ? count * (challenge.pointsSystem.scaling ? 1 : 1) 
+      : challenge.pointsSystem.maxPoints || 1;
+    
+    const newResult: ChallengeResult = {
+      id: `result-${mockChallengeResults.length + 1}`,
+      challengeId,
+      athleteId,
+      date: new Date().toISOString(),
+      points,
+      details: {
+        notes,
+        submissions: challenge.type === 'submission' ? count : undefined,
+        submissionTypes: challenge.type === 'submission' ? [challenge.title.toLowerCase()] : undefined,
+      }
+    };
+    
+    mockChallengeResults.push(newResult);
+    
+    return newResult;
   }
 };

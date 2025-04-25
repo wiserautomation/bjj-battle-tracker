@@ -3,10 +3,12 @@ import { useApp } from "@/context/AppContext";
 import { Challenge } from "@/types";
 import { useState } from "react";
 import ChallengeCard from "./ChallengeCard";
+import { useNavigate } from "react-router-dom";
 
 const ChallengesList = () => {
   const { currentUser, getChallenges, getChallengesByAthlete } = useApp();
   const [filter, setFilter] = useState<'all' | 'active' | 'upcoming' | 'completed'>('all');
+  const navigate = useNavigate();
   
   const challenges = currentUser?.role === 'athlete'
     ? getChallengesByAthlete(currentUser.id)
@@ -31,7 +33,7 @@ const ChallengesList = () => {
 
   const handleChallengeSelect = (challengeId: string) => {
     console.log(`Challenge selected: ${challengeId}`);
-    // Navigate to challenge detail page or open modal
+    navigate(`/challenge/${challengeId}`);
   };
   
   return (
