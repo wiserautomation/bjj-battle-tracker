@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import SchoolDashboardPage from "./pages/SchoolDashboardPage";
 import ChatPage from "./pages/ChatPage";
+import AdminPage from "./pages/AdminPage";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
