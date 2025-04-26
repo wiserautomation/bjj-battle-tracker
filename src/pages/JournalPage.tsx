@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Search } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
+import AIJournalInsights from "@/components/journal/AIJournalInsights";
 
 const JournalPage = () => {
   const { currentUser, getJournalEntriesByAthlete } = useApp();
@@ -60,6 +61,9 @@ const JournalPage = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+        
+        {/* Add AI Journal Insights component */}
+        <AIJournalInsights entries={entries} />
         
         {sortedEntries.length === 0 ? (
           <div className="flex items-center justify-center flex-col text-center p-12 border rounded-lg">

@@ -14,6 +14,8 @@ import AthletesPage from "./pages/AthletesPage";
 import ChallengeDetailPage from "./pages/ChallengeDetailPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import NotFound from "./pages/NotFound";
+import AuthPage from "./pages/AuthPage";
+import SchoolDashboardPage from "./pages/SchoolDashboardPage";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/dashboard" element={<Index />} />
             <Route path="/journal" element={<JournalPage />} />
             <Route path="/profile" element={<ProfilePage />} />
@@ -33,6 +36,7 @@ const App = () => (
             <Route path="/athletes" element={<AthletesPage />} />
             <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
+            <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
