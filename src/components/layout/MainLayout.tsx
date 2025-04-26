@@ -16,7 +16,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bjj-navy text-white">
         <div className="text-center p-8">
-          <h1 className="text-4xl font-bold mb-4">Welcome to PLAY BJJ</h1>
+          <h1 className="text-4xl font-bold mb-4">Welcome to JU-PLAY</h1>
           <p className="text-xl">Please log in to continue</p>
         </div>
       </div>

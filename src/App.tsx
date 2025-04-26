@@ -16,6 +16,7 @@ import SubscriptionPage from "./pages/SubscriptionPage";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import SchoolDashboardPage from "./pages/SchoolDashboardPage";
+import ChatPage from "./pages/ChatPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
+            <Route path="/chat" element={<ChatPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

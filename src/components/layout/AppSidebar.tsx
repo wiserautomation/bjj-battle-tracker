@@ -1,3 +1,4 @@
+
 import { useApp } from "@/context/AppContext";
 import { Athlete, School } from "@/types";
 import { 
@@ -14,7 +15,7 @@ import {
   SidebarMenuButton
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Trophy, Notebook, User, Users } from "lucide-react";
+import { Calendar, Trophy, Notebook, User, Users, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AppSidebar = () => {
@@ -60,9 +61,9 @@ const AppSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/" className="flex items-center gap-3">
+                  <Link to="/dashboard" className="flex items-center gap-3">
                     <Trophy className="h-5 w-5" />
-                    <span>Challenges</span>
+                    <span>Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -89,6 +90,15 @@ const AppSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
+                  <Link to="/chat" className="flex items-center gap-3">
+                    <MessageSquare className="h-5 w-5" />
+                    <span>School Chat</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
                   <Link to="/profile" className="flex items-center gap-3">
                     <User className="h-5 w-5" />
                     <span>Profile</span>
@@ -99,9 +109,9 @@ const AppSidebar = () => {
               {!isAthlete && (
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to="/athletes" className="flex items-center gap-3">
+                    <Link to="/school-dashboard" className="flex items-center gap-3">
                       <Users className="h-5 w-5" />
-                      <span>Athletes</span>
+                      <span>School Admin</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -112,7 +122,7 @@ const AppSidebar = () => {
       </SidebarContent>
       
       <SidebarFooter className="flex justify-center p-4">
-        <p className="text-xs text-muted-foreground">PLAY BJJ APP © 2025</p>
+        <p className="text-xs text-muted-foreground">JU-PLAY © 2025</p>
       </SidebarFooter>
     </Sidebar>
   );
