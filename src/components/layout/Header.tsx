@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Athlete } from "@/types";
 
 const Header = () => {
   const { currentUser } = useApp();
@@ -42,6 +43,10 @@ const Header = () => {
     ? currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase()
     : 'U';
   
+  // Check if user is an athlete to access belt color
+  const isAthlete = currentUser.role === 'athlete';
+  const athlete = isAthlete ? (currentUser as Athlete) : null;
+  
   return (
     <header className="h-16 border-b flex items-center justify-between px-4 bg-card">
       <div className="flex items-center gap-2">
@@ -58,7 +63,7 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={currentUser.profilePicture} />
-                <AvatarFallback className={currentUser.role === 'athlete' && currentUser.belt ? `bg-bjj-${currentUser.belt}` : undefined}>
+                <AvatarFallback className={athlete && athlete.belt ? `bg-bjj-${athlete.belt}` : undefined}>
                   {userInitials}
                 </AvatarFallback>
               </Avatar>

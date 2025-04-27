@@ -1,7 +1,8 @@
+
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Notebook } from "lucide-react";
-import { Athlete } from "@/types";
+import { Athlete, User } from "@/types";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -13,6 +14,7 @@ const RecentJournalEntries = () => {
     return null;
   }
   
+  // Type assertion using 'as' since we've already checked the role
   const athlete = currentUser as Athlete;
   const journalEntries = getJournalEntriesByAthlete(athlete.id);
   

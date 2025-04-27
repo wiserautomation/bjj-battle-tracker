@@ -1,6 +1,6 @@
 
 import { useApp } from "@/context/AppContext";
-import { Athlete } from "@/types";
+import { Athlete, User } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Award } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +14,7 @@ const AchievementsList = () => {
     return null;
   }
   
+  // Type assertion using 'as' since we've already checked the role
   const athlete = currentUser as Athlete;
   const badges = getAthleteBadges(athlete.id);
   

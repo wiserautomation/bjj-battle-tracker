@@ -1,9 +1,10 @@
 
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Challenge } from "@/types";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Trophy } from "lucide-react";
 
 interface ChallengesListProps {
   challenges: Challenge[];
@@ -12,54 +13,50 @@ interface ChallengesListProps {
 
 export const ChallengesList = ({ challenges, onNewChallenge }: ChallengesListProps) => {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>School Challenges</CardTitle>
-          <CardDescription>Create and manage training challenges</CardDescription>
-        </div>
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <Input
+          placeholder="Search challenges..."
+          className="max-w-xs"
+        />
         <Button onClick={onNewChallenge}>
-          <Plus className="mr-2 h-4 w-4" />
+          <Trophy className="mr-2 h-4 w-4" />
           New Challenge
         </Button>
-      </CardHeader>
-      <CardContent>
-        {challenges.length === 0 ? (
-          <div className="text-center py-10 border rounded-md">
-            <Trophy className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-            <p className="text-muted-foreground">No challenges created yet</p>
-            <Button className="mt-4" onClick={onNewChallenge}>Create Your First Challenge</Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {challenges.map(challenge => (
-              <Card key={challenge.id}>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-semibold text-lg">{challenge.title}</h3>
-                      <p className="text-muted-foreground text-sm">{challenge.description}</p>
-                      <div className="flex gap-2 mt-2">
-                        <Badge variant="outline">
-                          {new Date(challenge.endDate) >= new Date() ? 'Active' : 'Completed'}
-                        </Badge>
-                        <Badge variant="outline">{challenge.type}</Badge>
-                      </div>
-                      <p className="text-sm mt-2">
-                        {new Date(challenge.startDate).toLocaleDateString()} - {new Date(challenge.endDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <Button variant="outline" size="sm">View Details</Button>
-                      <Button variant="outline" size="sm">Edit Challenge</Button>
-                    </div>
+      </div>
+      
+      {challenges.length === 0 ? (
+        <div className="text-center py-8">
+          <Trophy className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-1">No challenges yet</h3>
+          <p className="text-muted-foreground mb-4">Create your first challenge for your athletes</p>
+          <Button onClick={onNewChallenge}>Create Challenge</Button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {challenges.map(challenge => (
+            <Card key={challenge.id} className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <Badge className="mb-2 inline-flex">{challenge.type}</Badge>
+                <CardTitle>{challenge.title}</CardTitle>
+                <CardDescription className="line-clamp-2">{challenge.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-sm flex justify-between">
+                  <div>
+                    <p className="text-muted-foreground">Start</p>
+                    <p>{new Date(challenge.startDate).toLocaleDateString()}</p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                  <div>
+                    <p className="text-muted-foreground">End</p>
+                    <p>{new Date(challenge.endDate).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
