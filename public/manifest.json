@@ -7,6 +7,7 @@
   "display": "standalone",
   "background_color": "#0b112e",
   "theme_color": "#0b112e",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -18,6 +19,20 @@
       "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your training dashboard",
+      "url": "/dashboard"
+    },
+    {
+      "name": "Journal",
+      "short_name": "Journal",
+      "description": "Access your training journal",
+      "url": "/journal"
     }
   ]
 }

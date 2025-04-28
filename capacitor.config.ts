@@ -2,7 +2,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.876900f5b0bc4da2a63bf8acb6153a0a',
+  appId: 'app.ju.play',
   appName: 'JU-PLAY',
   webDir: 'dist',
   server: {
@@ -12,9 +12,16 @@ const config: CapacitorConfig = {
   ios: {
     scheme: 'JU-PLAY'
   },
-  // Add any additional configuration for specific platforms
   plugins: {
-    // Configure any Capacitor plugins here
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: "#0b112e",
+      splashImmersive: true,
+      splashFullScreen: true
+    },
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"]
+    }
   }
 };
 

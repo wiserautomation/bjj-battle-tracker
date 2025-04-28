@@ -1,26 +1,39 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { School } from "@/types";
-import { Search } from "lucide-react";
+import { Search, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SchoolEnrollment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [nearbySchools, setNearbySchools] = useState<School[]>([]);
   const { getSchools, currentUser, joinSchool } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const allSchools = getSchools();
   const filteredSchools = allSchools.filter(
     school => school.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
               (school.location && school.location.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  useEffect(() => {
+    // Simulate finding nearby schools based on geolocation
+    // In a real app, this would use the browser's geolocation API
+    const randomSchools = [...allSchools]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3);
+    
+    setNearbySchools(randomSchools);
+  }, [allSchools]);
 
   const handleJoinSchool = async (schoolId: string) => {
     if (!currentUser) return;
@@ -65,7 +78,7 @@ const SchoolEnrollment = () => {
             />
           </div>
           
-          {isSearching && (
+          {isSearching ? (
             <div className="space-y-3 mt-4">
               {filteredSchools.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">No schools found matching your search.</p>
@@ -74,7 +87,12 @@ const SchoolEnrollment = () => {
                   <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
                     <div>
                       <p className="font-medium">{school.name}</p>
-                      <p className="text-sm text-muted-foreground">{school.location}</p>
+                      {school.location && (
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          <span>{school.location}</span>
+                        </div>
+                      )}
                     </div>
                     <Button size="sm" onClick={() => handleJoinSchool(school.id)}>
                       Join
@@ -82,6 +100,26 @@ const SchoolEnrollment = () => {
                   </div>
                 ))
               )}
+            </div>
+          ) : (
+            <div className="space-y-3 mt-4">
+              <h3 className="text-sm font-medium text-muted-foreground">Nearby Schools</h3>
+              {nearbySchools.map((school) => (
+                <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
+                  <div>
+                    <p className="font-medium">{school.name}</p>
+                    {school.location && (
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <MapPin className="h-3 w-3 mr-1" />
+                        <span>{school.location}</span>
+                      </div>
+                    )}
+                  </div>
+                  <Button size="sm" onClick={() => handleJoinSchool(school.id)}>
+                    Join
+                  </Button>
+                </div>
+              ))}
             </div>
           )}
           
@@ -92,6 +130,11 @@ const SchoolEnrollment = () => {
           </div>
         </div>
       </CardContent>
+      <CardFooter className="flex justify-center border-t pt-4">
+        <Button variant="outline" size={isMobile ? "sm" : "default"} onClick={() => setIsSearching(!isSearching)}>
+          {isSearching ? "Show Nearby Schools" : "Search All Schools"}
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

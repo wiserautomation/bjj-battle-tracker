@@ -1,3 +1,4 @@
+
 export interface User {
   id: string;
   name: string;
@@ -13,6 +14,10 @@ export interface School extends User {
   location?: string;
   contact?: string;
   athletes?: string[];
+  pricing?: {
+    pricePerStudent: number; // in cents
+    commission?: number;
+  };
 }
 
 export interface Athlete extends User {
@@ -25,6 +30,7 @@ export interface Athlete extends User {
   };
   achievements?: string[];
   schoolId?: string;
+  subscriptionStatus?: 'trial' | 'active' | 'cancelled' | 'none';
 }
 
 export interface Challenge {
@@ -89,4 +95,25 @@ export interface Badge {
     count: number;
     specificType?: string;
   };
+}
+
+export interface PricingConfig {
+  id: string;
+  minPrice: number; // in cents
+  maxPrice: number; // in cents
+  commissionRate: number; // percentage
+  commissionThreshold: number; // in cents
+}
+
+export interface SchoolSubscription {
+  id: string;
+  schoolId: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  pricePerStudent: number; // in cents
+  commissionRate: number; // percentage
+  commissionAmount: number; // in cents
+  status: 'pending' | 'active' | 'cancelled' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
 }

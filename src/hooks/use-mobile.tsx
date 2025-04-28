@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 768
@@ -16,4 +17,19 @@ export function useIsMobile() {
   }, [])
 
   return !!isMobile
+}
+
+export function useIsNativeApp() {
+  const [isNativeApp, setIsNativeApp] = React.useState(false)
+  
+  React.useEffect(() => {
+    // Check if running in Capacitor native container
+    const isCapacitor = window.location.href.includes('capacitor://') || 
+                       (window.Capacitor && window.Capacitor.isNativePlatform) ||
+                       document.URL.includes('capacitor://');
+                       
+    setIsNativeApp(!!isCapacitor)
+  }, [])
+  
+  return isNativeApp
 }

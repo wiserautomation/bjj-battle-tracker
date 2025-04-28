@@ -18,6 +18,7 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
 });
 
 // Activate Service Worker
@@ -33,6 +34,7 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  self.clients.claim();
 });
 
 // Fetch from cache or network
@@ -46,10 +48,37 @@ self.addEventListener('fetch', event => {
         }
         return fetch(event.request).then(
           response => {
-            // Return the response directly without caching dynamic content
+            // Don't cache if it's not a GET request
+            if (event.request.method !== 'GET') {
+              return response;
+            }
+
+            // IMPORTANT: Clone the response. A response is a stream
+            // and because we want the browser to consume the response
+            // as well as the cache consuming the response, we need
+            // to clone it so we have two streams.
+            var responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+
             return response;
           }
         );
       })
   );
+});
+
+// Push notification functionality - can be expanded later
+self.addEventListener('push', event => {
+  const title = 'JU-PLAY';
+  const options = {
+    body: event.data.text(),
+    icon: '/icon-192x192.png',
+    badge: '/icon-192x192.png'
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });
