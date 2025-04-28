@@ -10,7 +10,13 @@ const config: CapacitorConfig = {
     cleartext: true
   },
   ios: {
-    scheme: 'JU-PLAY'
+    scheme: 'JU-PLAY',
+    contentInset: 'automatic',
+    preferredContentMode: 'mobile',
+    backgroundColor: '#0b112e'
+  },
+  android: {
+    backgroundColor: '#0b112e'
   },
   plugins: {
     SplashScreen: {

@@ -7,7 +7,8 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   '/icon-192x192.png',
-  '/icon-512x512.png'
+  '/icon-512x512.png',
+  '/apple-touch-icon.png'
 ];
 
 // Install Service Worker
@@ -71,14 +72,44 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Push notification functionality - can be expanded later
+// Push notification functionality
 self.addEventListener('push', event => {
   const title = 'JU-PLAY';
   const options = {
-    body: event.data.text(),
+    body: event.data ? event.data.text() : 'New notification from JU-PLAY',
     icon: '/icon-192x192.png',
-    badge: '/icon-192x192.png'
+    badge: '/icon-192x192.png',
+    data: {
+      url: self.registration.scope
+    }
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Notification click handler
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  
+  // This looks to see if the current is already open and focuses it
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window'
+    })
+    .then(function(clientList) {
+      const hadWindowToFocus = clientList.some(windowClient => {
+        if (windowClient.url === event.notification.data.url) {
+          windowClient.focus();
+          return true;
+        }
+        return false;
+      });
+
+      if (!hadWindowToFocus) {
+        clients.openWindow(event.notification.data.url).then(windowClient => 
+          windowClient && windowClient.focus()
+        );
+      }
+    })
+  );
 });
