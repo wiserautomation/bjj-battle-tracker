@@ -1,6 +1,18 @@
 
 import * as React from "react"
 
+// Define the Capacitor interface to avoid TypeScript errors
+interface CapacitorGlobal {
+  isNativePlatform?: boolean;
+}
+
+// Extend the Window interface to include Capacitor
+declare global {
+  interface Window {
+    Capacitor?: CapacitorGlobal;
+  }
+}
+
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
