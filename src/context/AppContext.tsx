@@ -28,6 +28,8 @@ interface AppContextType {
   getBadges: () => Badge[];
   getAthleteBadges: (athleteId: string) => Badge[];
   logChallengeAchievement: (params: LogAchievementParams) => void;
+  joinSchool: (athleteId: string, schoolId: string) => Promise<void>;
+  hasSchool: (athleteId: string) => boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -45,6 +47,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
       count,
       notes,
     });
+  };
+
+  const joinSchool = async (athleteId: string, schoolId: string) => {
+    // In a real app, this would be a call to the backend
+    // For our mock, we'll update the current user
+    if (currentUser && currentUser.role === 'athlete') {
+      const updatedUser = {
+        ...currentUser,
+        schoolId
+      };
+      setCurrentUser(updatedUser);
+      return Promise.resolve();
+    }
+    return Promise.reject("User is not an athlete");
+  };
+
+  const hasSchool = (athleteId: string) => {
+    const athlete = mockDataService.getAthleteById(athleteId);
+    return !!athlete?.schoolId;
   };
 
   const value = {
@@ -66,6 +87,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     getBadges: mockDataService.getBadges,
     getAthleteBadges: mockDataService.getAthleteBadges,
     logChallengeAchievement,
+    joinSchool,
+    hasSchool,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

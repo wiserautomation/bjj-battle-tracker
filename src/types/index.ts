@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   name: string;
@@ -25,6 +24,7 @@ export interface Athlete extends User {
     yearsTraining: number;
   };
   achievements?: string[];
+  schoolId?: string;
 }
 
 export interface Challenge {

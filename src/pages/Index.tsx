@@ -10,6 +10,7 @@ import RecentJournalEntries from "@/components/dashboard/RecentJournalEntries";
 import AchievementsList from "@/components/dashboard/AchievementsList";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
 
 interface RankedAthlete {
   id: string;
@@ -21,9 +22,10 @@ interface RankedAthlete {
 }
 
 const Index = () => {
-  const { currentUser, getChallengesByAthlete, getAthleteResults } = useApp();
+  const { currentUser, getChallengesByAthlete, getAthleteResults, hasSchool } = useApp();
   
   const isAthlete = currentUser?.role === 'athlete';
+  const hasJoinedSchool = isAthlete && hasSchool(currentUser.id);
   
   // Calculate stats for athlete
   let activeChallenges = 0;
@@ -32,7 +34,7 @@ const Index = () => {
   let unreadMessages = 3;
   let notifications = 2;
   
-  if (isAthlete) {
+  if (isAthlete && hasJoinedSchool) {
     const challenges = getChallengesByAthlete(currentUser!.id);
     const now = new Date();
     
@@ -71,7 +73,11 @@ const Index = () => {
           <p className="text-muted-foreground">Track your progress and conquer new challenges</p>
         </div>
         
-        {isAthlete && (
+        {isAthlete && !hasJoinedSchool && (
+          <SchoolEnrollment />
+        )}
+        
+        {isAthlete && hasJoinedSchool && (
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <StatCard 
               title="Active Challenges" 
@@ -113,86 +119,97 @@ const Index = () => {
           </div>
         )}
         
-        <Tabs defaultValue={isAthlete ? "rankings" : "challenges"} className="space-y-4">
-          <TabsList>
+        {(!isAthlete || hasJoinedSchool) ? (
+          <Tabs defaultValue={isAthlete ? "rankings" : "challenges"} className="space-y-4">
+            <TabsList>
+              {isAthlete && (
+                <TabsTrigger value="rankings">Rankings</TabsTrigger>
+              )}
+              <TabsTrigger value="challenges">Challenges</TabsTrigger>
+              {isAthlete && (
+                <TabsTrigger value="progress">Your Progress</TabsTrigger>
+              )}
+            </TabsList>
+            
             {isAthlete && (
-              <TabsTrigger value="rankings">Rankings</TabsTrigger>
-            )}
-            <TabsTrigger value="challenges">Challenges</TabsTrigger>
-            {isAthlete && (
-              <TabsTrigger value="progress">Your Progress</TabsTrigger>
-            )}
-          </TabsList>
-          
-          {isAthlete && (
-            <TabsContent value="rankings">
-              <Card>
-                <CardHeader>
-                  <CardTitle>School Rankings</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {rankedAthletes.map((athlete, index) => {
-                      const isCurrentUser = athlete.id === currentUser?.id;
-                      return (
-                        <div 
-                          key={athlete.id}
-                          className={`flex items-center justify-between p-3 rounded-md ${
-                            isCurrentUser ? "bg-muted" : "hover:bg-accent"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`flex items-center justify-center h-7 w-7 rounded-full ${
-                              index < 3 ? "bg-bjj-gold text-white" : "bg-muted-foreground/20"
-                            } font-bold text-sm`}>
-                              {index + 1}
-                            </div>
-                            <Avatar>
-                              <AvatarImage src={athlete.profilePicture} alt={athlete.name} />
-                              <AvatarFallback className={`bg-bjj-${athlete.belt}`}>
-                                {athlete.name.substring(0, 2).toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="font-medium">
-                                {athlete.name} {isCurrentUser && "(You)"}
-                              </p>
-                              <div className="flex items-center gap-1 mt-1">
-                                <Badge variant="outline" className="capitalize">
-                                  {athlete.belt} Belt
-                                </Badge>
-                                {Array.from({ length: athlete.stripes }).map((_, i) => (
-                                  <span key={i} className="inline-block h-2 w-2 bg-bjj-gold rounded-full"></span>
-                                ))}
+              <TabsContent value="rankings">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>School Rankings</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {rankedAthletes.map((athlete, index) => {
+                        const isCurrentUser = athlete.id === currentUser?.id;
+                        return (
+                          <div 
+                            key={athlete.id}
+                            className={`flex items-center justify-between p-3 rounded-md ${
+                              isCurrentUser ? "bg-muted" : "hover:bg-accent"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`flex items-center justify-center h-7 w-7 rounded-full ${
+                                index < 3 ? "bg-bjj-gold text-white" : "bg-muted-foreground/20"
+                              } font-bold text-sm`}>
+                                {index + 1}
+                              </div>
+                              <Avatar>
+                                <AvatarImage src={athlete.profilePicture} alt={athlete.name} />
+                                <AvatarFallback className={`bg-bjj-${athlete.belt}`}>
+                                  {athlete.name.substring(0, 2).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="font-medium">
+                                  {athlete.name} {isCurrentUser && "(You)"}
+                                </p>
+                                <div className="flex items-center gap-1 mt-1">
+                                  <Badge variant="outline" className="capitalize">
+                                    {athlete.belt} Belt
+                                  </Badge>
+                                  {Array.from({ length: athlete.stripes }).map((_, i) => (
+                                    <span key={i} className="inline-block h-2 w-2 bg-bjj-gold rounded-full"></span>
+                                  ))}
+                                </div>
                               </div>
                             </div>
+                            <div className="text-right">
+                              <p className="font-bold text-xl">{athlete.points}</p>
+                              <p className="text-xs text-muted-foreground">points</p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-bold text-xl">{athlete.points}</p>
-                            <p className="text-xs text-muted-foreground">points</p>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
+                        )
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            )}
+            
+            <TabsContent value="challenges" className="space-y-4">
+              <ChallengesList />
             </TabsContent>
-          )}
-          
-          <TabsContent value="challenges" className="space-y-4">
-            <ChallengesList />
-          </TabsContent>
-          
-          {isAthlete && (
-            <TabsContent value="progress">
-              <div className="grid md:grid-cols-2 gap-4">
-                <RecentJournalEntries />
-                <AchievementsList />
-              </div>
-            </TabsContent>
-          )}
-        </Tabs>
+            
+            {isAthlete && (
+              <TabsContent value="progress">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <RecentJournalEntries />
+                  <AchievementsList />
+                </div>
+              </TabsContent>
+            )}
+          </Tabs>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>Getting Started</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>To access all features like challenges, rankings, and journal tracking, please join a school first.</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </MainLayout>
   );
