@@ -9,6 +9,72 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      pricing_config: {
+        Row: {
+          commission_rate: number
+          commission_threshold: number
+          id: string
+          max_price: number
+          min_price: number
+          updated_at: string
+        }
+        Insert: {
+          commission_rate?: number
+          commission_threshold?: number
+          id?: string
+          max_price?: number
+          min_price?: number
+          updated_at?: string
+        }
+        Update: {
+          commission_rate?: number
+          commission_threshold?: number
+          id?: string
+          max_price?: number
+          min_price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      school_subscriptions: {
+        Row: {
+          commission_amount: number
+          commission_rate: number
+          created_at: string
+          id: string
+          price_per_student: number
+          school_id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          commission_amount: number
+          commission_rate: number
+          created_at?: string
+          id?: string
+          price_per_student: number
+          school_id: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          price_per_student?: number
+          school_id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscribers: {
         Row: {
           created_at: string

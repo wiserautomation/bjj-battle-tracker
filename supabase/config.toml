@@ -1,1 +1,5 @@
+
 project_id = "esdjghfysppanwwogiud"
+
+[functions.manage-school-pricing]
+verify_jwt = true

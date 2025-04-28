@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
@@ -21,16 +20,14 @@ const AdminPage = () => {
   const [minPrice, setMinPrice] = useState(4.99);
   const [maxPrice, setMaxPrice] = useState(30);
   const [comissionThreshold, setComissionThreshold] = useState(10);
+  const [configId, setConfigId] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
       setLoading(true);
       try {
-        // In a real application, you'd check against a database or auth claims
         if (currentUser?.email === "peghin@gmail.com") {
           setIsAdmin(true);
-          // Here you'd fetch actual data from your database
-          // Mocking data for now
           setSchools([
             { id: '1', name: 'BJJ Elite Academy', location: 'New York', subscriberCount: 45, pricing: 12.99 },
             { id: '2', name: 'Gracie Barra', location: 'Los Angeles', subscriberCount: 68, pricing: 9.99 },
@@ -54,12 +51,61 @@ const AdminPage = () => {
     }
   }, [currentUser, toast]);
 
-  const handleSavePricingSettings = () => {
-    // In a real application, this would update your database
-    toast({
-      title: "Settings Saved",
-      description: "Pricing settings have been updated"
-    });
+  const fetchPricingConfig = async () => {
+    try {
+      const { data } = await supabase.functions.invoke('manage-school-pricing', {
+        body: { action: 'get_pricing_config' }
+      });
+      
+      if (data) {
+        setConfigId(data.id);
+        setMinPrice(data.min_price / 100);
+        setMaxPrice(data.max_price / 100);
+        setComissionRate(data.commission_rate);
+        setComissionThreshold(data.commission_threshold / 100);
+      }
+    } catch (error) {
+      console.error('Error fetching pricing config:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load pricing configuration"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSavePricingSettings = async () => {
+    try {
+      setLoading(true);
+      await supabase.functions.invoke('manage-school-pricing', {
+        body: {
+          action: 'update_pricing_config',
+          data: {
+            id: configId,
+            min_price: Math.round(minPrice * 100),
+            max_price: Math.round(maxPrice * 100),
+            commission_rate: comissionRate,
+            commission_threshold: Math.round(comissionThreshold * 100),
+          }
+        }
+      });
+
+      toast({
+        title: "Settings Saved",
+        description: "Pricing settings have been updated"
+      });
+    } catch (error) {
+      console.error('Error saving pricing config:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to save pricing configuration"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
