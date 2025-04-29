@@ -4,9 +4,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-// Use direct assignment instead of a functional component wrapper
 const TooltipProvider = TooltipPrimitive.Provider
-TooltipProvider.displayName = TooltipPrimitive.Provider.displayName
 
 const Tooltip = TooltipPrimitive.Root
 
