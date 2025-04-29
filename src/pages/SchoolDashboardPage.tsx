@@ -4,7 +4,7 @@ import { Plus, Trophy, MessageSquare } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import MainLayout from "@/components/layout/MainLayout";
 import { DashboardStats } from "@/components/school-dashboard/DashboardStats";
 import { AthletesList } from "@/components/school-dashboard/AthletesList";
