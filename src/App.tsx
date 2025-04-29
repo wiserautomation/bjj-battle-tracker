@@ -2,7 +2,7 @@
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
@@ -33,8 +33,8 @@ const queryClient = new QueryClient({
 
 // Simplified component structure to avoid context nesting issues
 const App = () => (
-  <TooltipPrimitive.Provider>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
       <AppProvider>
         <BrowserRouter>
           <Routes>
@@ -57,8 +57,8 @@ const App = () => (
           <Sonner />
         </BrowserRouter>
       </AppProvider>
-    </QueryClientProvider>
-  </TooltipPrimitive.Provider>
+    </TooltipProvider>
+  </QueryClientProvider>
 );
 
 export default App;
