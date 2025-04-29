@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { School, User, Mail, Google } from "lucide-react";
+import { School, User, Mail } from "lucide-react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -183,7 +183,7 @@ const AuthPage = () => {
                   onClick={handleGoogleLogin}
                   disabled={loading}
                 >
-                  <Google className="mr-2 h-4 w-4" />
+                  <Mail className="mr-2 h-4 w-4" />
                   Sign In with Google
                 </Button>
               </form>
@@ -314,7 +314,7 @@ const AuthPage = () => {
                   onClick={handleGoogleLogin}
                   disabled={loading}
                 >
-                  <Google className="mr-2 h-4 w-4" />
+                  <Mail className="mr-2 h-4 w-4" />
                   Sign Up with Google
                 </Button>
               </form>

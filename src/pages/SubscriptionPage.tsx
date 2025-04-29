@@ -8,6 +8,7 @@ import { useApp } from "@/context/AppContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield, School as SchoolIcon, Calendar, Bell } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useNavigate } from "react-router-dom";
 
 const SubscriptionPage = () => {
   const { currentUser } = useApp();
@@ -15,6 +16,7 @@ const SubscriptionPage = () => {
   const [loading, setLoading] = useState(false);
   const [isSchool, setIsSchool] = useState(false);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   // Determine if the current user is a school
   useState(() => {
