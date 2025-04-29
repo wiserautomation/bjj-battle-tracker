@@ -4,8 +4,9 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-// Export the provider component directly
-const TooltipProvider = TooltipPrimitive.Provider
+const TooltipProvider = ({ children }: { children: React.ReactNode }) => {
+  return <TooltipPrimitive.Provider delayDuration={300}>{children}</TooltipPrimitive.Provider>
+}
 
 const Tooltip = TooltipPrimitive.Root
 
