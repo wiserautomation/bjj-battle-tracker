@@ -24,10 +24,10 @@ import AdminPage from "./pages/AdminPage";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AppProvider>
-        <BrowserRouter>
+  <QueryClientProvider client={queryClient}>
+    <AppProvider>
+      <BrowserRouter>
+        <React.StrictMode>
           <TooltipProvider>
             <Routes>
               <Route path="/" element={<LandingPage />} />
@@ -45,13 +45,13 @@ const App = () => (
               <Route path="/admin" element={<AdminPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Toaster />
+            <Sonner />
           </TooltipProvider>
-        </BrowserRouter>
-        <Toaster />
-        <Sonner />
-      </AppProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+        </React.StrictMode>
+      </BrowserRouter>
+    </AppProvider>
+  </QueryClientProvider>
 );
 
 export default App;
