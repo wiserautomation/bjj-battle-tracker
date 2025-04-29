@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,11 +19,11 @@ const SubscriptionPage = () => {
   const navigate = useNavigate();
 
   // Determine if the current user is a school
-  useState(() => {
+  useEffect(() => {
     if (currentUser?.role === 'school') {
       setIsSchool(true);
     }
-  });
+  }, [currentUser]);
 
   const handleSubscribeAthlete = async () => {
     try {
