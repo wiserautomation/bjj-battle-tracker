@@ -11,8 +11,4 @@ if (!rootElement) throw new Error("Root element not found");
 const root = createRoot(rootElement);
 
 // Render the app without additional providers at this level
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+root.render(<App />);
