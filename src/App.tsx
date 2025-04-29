@@ -5,7 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import LandingPage from "./pages/LandingPage";
 import Index from "./pages/Index";
 import JournalPage from "./pages/JournalPage";
@@ -34,8 +34,8 @@ const queryClient = new QueryClient({
 // Simplified component structure to avoid context nesting issues
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+    <TooltipProvider>
+      <QueryClientProvider client={queryClient}>
         <AppProvider>
           <BrowserRouter>
             <Routes>
@@ -58,8 +58,8 @@ const App = () => {
             <Sonner />
           </BrowserRouter>
         </AppProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </TooltipProvider>
   );
 };
 
