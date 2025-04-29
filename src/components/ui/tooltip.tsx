@@ -4,17 +4,11 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-// Export the original Provider for components that need direct access
+// Create a proper TooltipProvider component
 const TooltipProvider = TooltipPrimitive.Provider
 
-// Self-contained Tooltip component that includes its own provider
-const Tooltip = ({ children, ...props }) => (
-  <TooltipPrimitive.Provider delayDuration={0}>
-    <TooltipPrimitive.Root {...props}>
-      {children}
-    </TooltipPrimitive.Root>
-  </TooltipPrimitive.Provider>
-)
+// Modified Tooltip component that doesn't include its own provider
+const Tooltip = TooltipPrimitive.Root
 
 const TooltipTrigger = TooltipPrimitive.Trigger
 
