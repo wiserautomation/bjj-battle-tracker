@@ -4,11 +4,9 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-// Export a simple wrapper around TooltipProvider
-const TooltipProvider = ({ children, ...props }: TooltipPrimitive.TooltipProviderProps) => {
-  return <TooltipPrimitive.Provider {...props}>{children}</TooltipPrimitive.Provider>
-}
-TooltipProvider.displayName = "TooltipProvider"
+// Use direct assignment instead of a functional component wrapper
+const TooltipProvider = TooltipPrimitive.Provider
+TooltipProvider.displayName = TooltipPrimitive.Provider.displayName
 
 const Tooltip = TooltipPrimitive.Root
 
