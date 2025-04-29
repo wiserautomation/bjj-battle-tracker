@@ -4,10 +4,6 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-// Create a proper TooltipProvider component
-const TooltipProvider = TooltipPrimitive.Provider
-
-// Modified Tooltip component that doesn't include its own provider
 const Tooltip = TooltipPrimitive.Root
 
 const TooltipTrigger = TooltipPrimitive.Trigger
@@ -27,5 +23,8 @@ const TooltipContent = React.forwardRef<
   />
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
+
+// Export the Provider separately
+const TooltipProvider = TooltipPrimitive.Provider
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
