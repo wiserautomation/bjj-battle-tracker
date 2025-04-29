@@ -13,6 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { format, addMonths } from "date-fns";
 
 interface RankedAthlete {
   id: string;
@@ -28,7 +30,7 @@ const Index = () => {
   const navigate = useNavigate();
   
   const isAthlete = currentUser?.role === 'athlete';
-  const hasJoinedSchool = isAthlete && hasSchool(currentUser.id);
+  const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
   
   // Calculate stats for athlete
   let activeChallenges = 0;
@@ -44,8 +46,8 @@ const Index = () => {
     }
   }, [currentUser, navigate]);
   
-  if (isAthlete && hasJoinedSchool) {
-    const challenges = getChallengesByAthlete(currentUser!.id);
+  if (isAthlete && hasJoinedSchool && currentUser) {
+    const challenges = getChallengesByAthlete(currentUser.id);
     const now = new Date();
     
     activeChallenges = challenges.filter(challenge => {
@@ -58,7 +60,7 @@ const Index = () => {
       return new Date() > new Date(challenge.endDate);
     }).length;
     
-    const results = getAthleteResults(currentUser!.id);
+    const results = getAthleteResults(currentUser.id);
     totalPoints = results.reduce((sum, result) => sum + result.points, 0);
 
     // These would come from real messaging and notification systems in a production app
@@ -67,17 +69,16 @@ const Index = () => {
   }
   
   // Mock ranked athletes data only if user has joined a school
-  const rankedAthletes: RankedAthlete[] = hasJoinedSchool ? [
-    { id: '1', name: 'Alex Johnson', belt: 'purple', stripes: 2, points: 840, profilePicture: "" },
-    { id: '2', name: 'Sarah Williams', belt: 'blue', stripes: 4, points: 720, profilePicture: "" },
-    { id: currentUser?.id || '3', name: currentUser?.name || 'You', belt: (currentUser as any)?.belt || 'white', stripes: (currentUser as any)?.stripes || 0, points: totalPoints, profilePicture: currentUser?.profilePicture },
-    { id: '4', name: 'Mike Brown', belt: 'blue', stripes: 3, points: 580, profilePicture: "" },
-    { id: '5', name: 'Emma Davis', belt: 'white', stripes: 4, points: 520, profilePicture: "" },
-    { id: '6', name: 'Ryan Clark', belt: 'white', stripes: 3, points: 460, profilePicture: "" },
-  ].sort((a, b) => b.points - a.points) : [];
+  const rankedAthletes: RankedAthlete[] = hasJoinedSchool && currentUser ? [
+    { id: currentUser.id, name: currentUser.name, belt: (currentUser as any)?.belt || 'white', stripes: (currentUser as any)?.stripes || 0, points: totalPoints, profilePicture: currentUser.profilePicture },
+  ] : [];
   
-  // Find user rank
-  const userRank = hasJoinedSchool ? rankedAthletes.findIndex(athlete => athlete.id === currentUser?.id) + 1 : 0;
+  // Find user rank - always #1 if they're the only one
+  const userRank = hasJoinedSchool ? 1 : 0;
+  
+  // Mock payment date for notification
+  const paymentDate = addMonths(new Date(), 1);
+  const showPaymentNotification = hasJoinedSchool;
   
   return (
     <MainLayout>
@@ -89,6 +90,16 @@ const Index = () => {
         
         {isAthlete && !hasJoinedSchool && (
           <SchoolEnrollment />
+        )}
+        
+        {showPaymentNotification && (
+          <div className="bg-amber-50 border border-amber-200 p-4 rounded-md flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-amber-800">Payment Reminder</h3>
+              <p className="text-amber-700 text-sm">Your next monthly payment is due on {format(paymentDate, 'MMMM d, yyyy')}</p>
+            </div>
+            <Button variant="outline" size="sm">View Details</Button>
+          </div>
         )}
         
         {(isAthlete && hasJoinedSchool) && (
@@ -136,16 +147,16 @@ const Index = () => {
         {(!isAthlete || hasJoinedSchool) ? (
           <Tabs defaultValue={isAthlete ? "rankings" : "challenges"} className="space-y-4">
             <TabsList>
-              {isAthlete && (
+              {isAthlete && hasJoinedSchool && (
                 <TabsTrigger value="rankings">Rankings</TabsTrigger>
               )}
               <TabsTrigger value="challenges">Challenges</TabsTrigger>
-              {isAthlete && (
+              {isAthlete && hasJoinedSchool && (
                 <TabsTrigger value="progress">Your Progress</TabsTrigger>
               )}
             </TabsList>
             
-            {isAthlete && (
+            {isAthlete && hasJoinedSchool && (
               <TabsContent value="rankings">
                 <Card>
                   <CardHeader>
@@ -202,10 +213,21 @@ const Index = () => {
             )}
             
             <TabsContent value="challenges" className="space-y-4">
-              <ChallengesList />
+              {hasJoinedSchool ? (
+                <ChallengesList />
+              ) : (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>No Challenges Available</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p>Join a school to see and participate in challenges.</p>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
             
-            {isAthlete && (
+            {isAthlete && hasJoinedSchool && (
               <TabsContent value="progress">
                 <div className="grid md:grid-cols-2 gap-4">
                   <RecentJournalEntries />

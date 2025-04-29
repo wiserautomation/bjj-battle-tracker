@@ -35,7 +35,7 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <React.StrictMode>
-      <TooltipProvider delayDuration={0}>
+      <TooltipProvider>
         <QueryClientProvider client={queryClient}>
           <AppProvider>
             <BrowserRouter>
