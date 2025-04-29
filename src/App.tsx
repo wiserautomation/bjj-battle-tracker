@@ -21,13 +21,14 @@ import SchoolBillingPage from "./pages/SchoolBillingPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
 
+// Create a single queryClient instance
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AppProvider>
-      <BrowserRouter>
-        <React.StrictMode>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <AppProvider>
+        <BrowserRouter>
           <TooltipProvider>
             <Routes>
               <Route path="/" element={<LandingPage />} />
@@ -48,10 +49,10 @@ const App = () => (
             <Toaster />
             <Sonner />
           </TooltipProvider>
-        </React.StrictMode>
-      </BrowserRouter>
-    </AppProvider>
-  </QueryClientProvider>
+        </BrowserRouter>
+      </AppProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 export default App;
