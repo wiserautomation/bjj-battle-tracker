@@ -45,7 +45,7 @@ serve(async (req) => {
       customerId = customer.id;
     }
 
-    // Create subscription session
+    // Create subscription session with fixed price of $4.99
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
@@ -55,10 +55,10 @@ serve(async (req) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "BJJ Battle Tracker Premium",
-              description: "Full access to all features",
+              name: "JU-PLAY Premium",
+              description: "Full access to all training features",
             },
-            unit_amount: 999, // $9.99
+            unit_amount: 499, // $4.99
             recurring: {
               interval: "month",
             },

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { School, User, Mail } from "lucide-react";
+import { School, User, Mail, Google } from "lucide-react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -101,11 +101,16 @@ const AuthPage = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
+          redirectTo: `${window.location.origin}/dashboard`,
+          queryParams: {
+            prompt: 'select_account'
+          }
         }
       });
 
       if (error) throw error;
+      
+      // Note: No navigation needed here as OAuth will handle the redirect
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -178,7 +183,7 @@ const AuthPage = () => {
                   onClick={handleGoogleLogin}
                   disabled={loading}
                 >
-                  <Mail className="mr-2 h-4 w-4" />
+                  <Google className="mr-2 h-4 w-4" />
                   Sign In with Google
                 </Button>
               </form>
@@ -192,7 +197,7 @@ const AuthPage = () => {
                   className="flex flex-col items-center gap-2 p-4 h-auto"
                   onClick={() => setAccountType("athlete")}
                 >
-                  <User size={24} />
+                  <User className="h-5 w-5" />
                   <span>Athlete</span>
                 </Button>
                 <Button 
@@ -201,7 +206,7 @@ const AuthPage = () => {
                   className="flex flex-col items-center gap-2 p-4 h-auto"
                   onClick={() => setAccountType("school")}
                 >
-                  <School size={24} />
+                  <School className="h-5 w-5" />
                   <span>School</span>
                 </Button>
               </div>
@@ -309,7 +314,7 @@ const AuthPage = () => {
                   onClick={handleGoogleLogin}
                   disabled={loading}
                 >
-                  <Mail className="mr-2 h-4 w-4" />
+                  <Google className="mr-2 h-4 w-4" />
                   Sign Up with Google
                 </Button>
               </form>

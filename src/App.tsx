@@ -16,6 +16,7 @@ import SubscriptionPage from "./pages/SubscriptionPage";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import SchoolDashboardPage from "./pages/SchoolDashboardPage";
+import SchoolBillingPage from "./pages/SchoolBillingPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
+            <Route path="/school-dashboard/billing" element={<SchoolBillingPage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<NotFound />} />

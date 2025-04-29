@@ -11,6 +11,8 @@ import AchievementsList from "@/components/dashboard/AchievementsList";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface RankedAthlete {
   id: string;
@@ -23,6 +25,7 @@ interface RankedAthlete {
 
 const Index = () => {
   const { currentUser, getChallengesByAthlete, getAthleteResults, hasSchool } = useApp();
+  const navigate = useNavigate();
   
   const isAthlete = currentUser?.role === 'athlete';
   const hasJoinedSchool = isAthlete && hasSchool(currentUser.id);
@@ -31,8 +34,15 @@ const Index = () => {
   let activeChallenges = 0;
   let completedChallenges = 0;
   let totalPoints = 0;
-  let unreadMessages = 3;
-  let notifications = 2;
+  let unreadMessages = 0;
+  let notifications = 0;
+  
+  useEffect(() => {
+    // For administrators, redirect to the admin panel
+    if (currentUser?.role === 'admin') {
+      navigate('/admin');
+    }
+  }, [currentUser, navigate]);
   
   if (isAthlete && hasJoinedSchool) {
     const challenges = getChallengesByAthlete(currentUser!.id);
@@ -50,20 +60,24 @@ const Index = () => {
     
     const results = getAthleteResults(currentUser!.id);
     totalPoints = results.reduce((sum, result) => sum + result.points, 0);
+
+    // These would come from real messaging and notification systems in a production app
+    unreadMessages = 0;
+    notifications = 0;
   }
   
-  // Mock ranked athletes data
-  const rankedAthletes: RankedAthlete[] = [
+  // Mock ranked athletes data only if user has joined a school
+  const rankedAthletes: RankedAthlete[] = hasJoinedSchool ? [
     { id: '1', name: 'Alex Johnson', belt: 'purple', stripes: 2, points: 840, profilePicture: "" },
     { id: '2', name: 'Sarah Williams', belt: 'blue', stripes: 4, points: 720, profilePicture: "" },
     { id: currentUser?.id || '3', name: currentUser?.name || 'You', belt: (currentUser as any)?.belt || 'white', stripes: (currentUser as any)?.stripes || 0, points: totalPoints, profilePicture: currentUser?.profilePicture },
     { id: '4', name: 'Mike Brown', belt: 'blue', stripes: 3, points: 580, profilePicture: "" },
     { id: '5', name: 'Emma Davis', belt: 'white', stripes: 4, points: 520, profilePicture: "" },
     { id: '6', name: 'Ryan Clark', belt: 'white', stripes: 3, points: 460, profilePicture: "" },
-  ].sort((a, b) => b.points - a.points);
+  ].sort((a, b) => b.points - a.points) : [];
   
   // Find user rank
-  const userRank = rankedAthletes.findIndex(athlete => athlete.id === currentUser?.id) + 1;
+  const userRank = hasJoinedSchool ? rankedAthletes.findIndex(athlete => athlete.id === currentUser?.id) + 1 : 0;
   
   return (
     <MainLayout>
@@ -77,7 +91,7 @@ const Index = () => {
           <SchoolEnrollment />
         )}
         
-        {isAthlete && hasJoinedSchool && (
+        {(isAthlete && hasJoinedSchool) && (
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <StatCard 
               title="Active Challenges" 
