@@ -3,7 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 // Create root once with nullish coalescing for safety
 const rootElement = document.getElementById("root");
@@ -14,7 +14,7 @@ const root = createRoot(rootElement);
 // Wrap the entire app with TooltipProvider at the highest level
 root.render(
   <React.StrictMode>
-    <TooltipProvider delayDuration={0}>
+    <TooltipProvider>
       <App />
     </TooltipProvider>
   </React.StrictMode>

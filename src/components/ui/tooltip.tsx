@@ -24,7 +24,7 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-// Export the Provider separately
+// Export the Provider directly from Radix
 const TooltipProvider = TooltipPrimitive.Provider
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
