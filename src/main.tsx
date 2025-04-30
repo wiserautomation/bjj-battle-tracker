@@ -9,5 +9,5 @@ if (!rootElement) throw new Error("Root element not found");
 
 const root = createRoot(rootElement);
 
-// Render the app without StrictMode to avoid duplicate hook calls
+// Render without StrictMode to prevent double initialization
 root.render(<App />);

@@ -5,7 +5,6 @@ import AppSidebar from "./AppSidebar";
 import Header from "./Header";
 import { useApp } from "@/context/AppContext";
 import { useIsMobile, useIsNativeApp } from "@/hooks/use-mobile";
-import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -31,21 +30,18 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const nativeAppStyles = isNativeApp ? 
     "pt-safe-top pb-safe-bottom pl-safe-left pr-safe-right" : "";
 
-  // Ensure TooltipProvider is the outermost provider that needs React context
   return (
-    <TooltipProvider>
-      <SidebarProvider>
-        <div className={`min-h-screen flex w-full ${nativeAppStyles}`}>
-          <AppSidebar />
-          <div className="flex-1 flex flex-col">
-            <Header />
-            <main className={`flex-1 p-4 ${isMobile ? "pb-16" : ""} overflow-auto`}>
-              {children}
-            </main>
-          </div>
+    <SidebarProvider>
+      <div className={`min-h-screen flex w-full ${nativeAppStyles}`}>
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <main className={`flex-1 p-4 ${isMobile ? "pb-16" : ""} overflow-auto`}>
+            {children}
+          </main>
         </div>
-      </SidebarProvider>
-    </TooltipProvider>
+      </div>
+    </SidebarProvider>
   );
 };
 
