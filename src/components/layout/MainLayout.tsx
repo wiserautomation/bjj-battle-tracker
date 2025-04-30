@@ -20,7 +20,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bjj-navy text-white">
         <div className="text-center p-8">
-          <h1 className="text-4xl font-bold mb-4">Welcome to JU-PLAY</h1>
+          <h1 className="text-3xl font-bold mb-4">Welcome to JU-PLAY</h1>
           <p className="text-xl">Please log in to continue</p>
         </div>
       </div>
@@ -31,6 +31,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const nativeAppStyles = isNativeApp ? 
     "pt-safe-top pb-safe-bottom pl-safe-left pr-safe-right" : "";
 
+  // Ensure TooltipProvider is the outermost provider that needs React context
   return (
     <TooltipProvider>
       <SidebarProvider>
