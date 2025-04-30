@@ -213,17 +213,21 @@ const Index = () => {
             )}
             
             <TabsContent value="challenges" className="space-y-4">
-              {hasJoinedSchool ? (
-                <ChallengesList />
+              {isAthlete ? (
+                hasJoinedSchool ? (
+                  <ChallengesList />
+                ) : (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>No Challenges Available</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p>Join a school to see and participate in challenges.</p>
+                    </CardContent>
+                  </Card>
+                )
               ) : (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>No Challenges Available</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p>Join a school to see and participate in challenges.</p>
-                  </CardContent>
-                </Card>
+                <ChallengesList />
               )}
             </TabsContent>
             

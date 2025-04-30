@@ -14,6 +14,7 @@ const SchoolEnrollment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [nearbySchools, setNearbySchools] = useState<School[]>([]);
+  const [isJoining, setIsJoining] = useState(false);
   const { getSchools, currentUser, joinSchool } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -38,20 +39,25 @@ const SchoolEnrollment = () => {
   const handleJoinSchool = async (schoolId: string) => {
     if (!currentUser) return;
     
+    setIsJoining(true);
+    
     try {
       await joinSchool(currentUser.id, schoolId);
       toast({
         title: "School joined successfully!",
         description: "You've been enrolled in the school.",
       });
-      // Refresh the page to update the UI
-      window.location.reload();
+      
+      // Redirect to dashboard after joining
+      navigate('/dashboard');
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Failed to join school",
         description: "Please try again later.",
       });
+    } finally {
+      setIsJoining(false);
     }
   };
   
@@ -78,7 +84,7 @@ const SchoolEnrollment = () => {
             />
           </div>
           
-          {isSearching ? (
+          {isSearching || searchTerm ? (
             <div className="space-y-3 mt-4">
               {filteredSchools.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">No schools found matching your search.</p>
@@ -94,8 +100,12 @@ const SchoolEnrollment = () => {
                         </div>
                       )}
                     </div>
-                    <Button size="sm" onClick={() => handleJoinSchool(school.id)}>
-                      Join
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleJoinSchool(school.id)}
+                      disabled={isJoining}
+                    >
+                      {isJoining ? "Joining..." : "Join"}
                     </Button>
                   </div>
                 ))
@@ -115,8 +125,12 @@ const SchoolEnrollment = () => {
                       </div>
                     )}
                   </div>
-                  <Button size="sm" onClick={() => handleJoinSchool(school.id)}>
-                    Join
+                  <Button 
+                    size="sm" 
+                    onClick={() => handleJoinSchool(school.id)}
+                    disabled={isJoining}
+                  >
+                    {isJoining ? "Joining..." : "Join"}
                   </Button>
                 </div>
               ))}
@@ -131,7 +145,11 @@ const SchoolEnrollment = () => {
         </div>
       </CardContent>
       <CardFooter className="flex justify-center border-t pt-4">
-        <Button variant="outline" size={isMobile ? "sm" : "default"} onClick={() => setIsSearching(!isSearching)}>
+        <Button 
+          variant="outline" 
+          size={isMobile ? "sm" : "default"} 
+          onClick={() => setIsSearching(!isSearching)}
+        >
           {isSearching ? "Show Nearby Schools" : "Search All Schools"}
         </Button>
       </CardFooter>

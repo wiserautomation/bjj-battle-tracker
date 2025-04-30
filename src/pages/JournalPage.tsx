@@ -16,7 +16,7 @@ import AIJournalInsights from "@/components/journal/AIJournalInsights";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
 
 const JournalPage = () => {
-  const { currentUser, getJournalEntriesByAthlete, hasSchool } = useApp();
+  const { currentUser, getJournalEntriesByAthlete, hasSchool, addJournalEntry } = useApp();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTag, setFilterTag] = useState<string | null>(null);
@@ -42,11 +42,14 @@ const JournalPage = () => {
   const allTags = [...new Set(journalEntries.flatMap(entry => entry.tags))];
 
   const handleCreateEntry = (newEntry: Partial<JournalEntry>) => {
-    // This would normally save to the database
+    // Add the new entry
+    addJournalEntry(newEntry);
+    
     toast({
       title: "Journal Entry Created",
       description: "Your entry has been saved successfully.",
     });
+    
     setShowCreateDialog(false);
   };
 

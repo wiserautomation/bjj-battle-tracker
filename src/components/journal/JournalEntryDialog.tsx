@@ -19,7 +19,7 @@ interface JournalEntryDialogProps {
 }
 
 const JournalEntryDialog = ({ open, onOpenChange, onSubmit, existingEntry }: JournalEntryDialogProps) => {
-  const { currentUser } = useApp();
+  const { currentUser, addJournalEntry } = useApp();
   const [title, setTitle] = useState(existingEntry?.title || "");
   const [content, setContent] = useState(existingEntry?.content || "");
   const [trainingType, setTrainingType] = useState<"gi" | "no-gi">(existingEntry?.trainingType || "gi");

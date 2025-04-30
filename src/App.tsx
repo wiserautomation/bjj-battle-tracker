@@ -31,7 +31,6 @@ const queryClient = new QueryClient({
   }
 });
 
-// Fix the provider hierarchy to resolve hook issues
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
