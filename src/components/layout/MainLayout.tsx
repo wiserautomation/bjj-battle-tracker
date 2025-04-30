@@ -32,19 +32,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     "pt-safe-top pb-safe-bottom pl-safe-left pr-safe-right" : "";
 
   return (
-    <SidebarProvider>
-      <div className={`min-h-screen flex w-full ${nativeAppStyles}`}>
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <Header />
-          <main className={`flex-1 p-4 ${isMobile ? "pb-16" : ""} overflow-auto`}>
-            <TooltipProvider>
+    <TooltipProvider>
+      <SidebarProvider>
+        <div className={`min-h-screen flex w-full ${nativeAppStyles}`}>
+          <AppSidebar />
+          <div className="flex-1 flex flex-col">
+            <Header />
+            <main className={`flex-1 p-4 ${isMobile ? "pb-16" : ""} overflow-auto`}>
               {children}
-            </TooltipProvider>
-          </main>
+            </main>
+          </div>
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </TooltipProvider>
   );
 };
 
