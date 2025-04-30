@@ -97,6 +97,7 @@ const CalendarPage = () => {
     }
   };
 
+  // Function to determine if a day has an event
   const getDateClassNames = (day: Date) => {
     const hasEvent = events.some(event => 
       event.date.getFullYear() === day.getFullYear() &&
@@ -104,7 +105,7 @@ const CalendarPage = () => {
       event.date.getDate() === day.getDate()
     );
     
-    return hasEvent ? "bg-primary/10 font-medium text-primary" : undefined;
+    return hasEvent ? "bg-primary/10 font-medium text-primary" : "";
   };
 
   if (isAthlete && !hasJoinedSchool) {
@@ -144,7 +145,7 @@ const CalendarPage = () => {
                 classNames={{
                   day_today: "bg-muted font-bold text-primary",
                   day_selected: "bg-primary text-primary-foreground hover:bg-primary",
-                  day: (day) => getDateClassNames(day) || ""
+                  day: (day) => getDateClassNames(day)
                 }}
               />
               <div className="mt-4 space-y-2">
