@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
@@ -145,7 +144,17 @@ const CalendarPage = () => {
                 classNames={{
                   day_today: "bg-muted font-bold text-primary",
                   day_selected: "bg-primary text-primary-foreground hover:bg-primary",
-                  day: (day) => getDateClassNames(day)
+                  day: "day-base"
+                }}
+                modifiers={{
+                  hasEvent: events.map(event => new Date(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate()
+                  ))
+                }}
+                modifiersClassNames={{
+                  hasEvent: "bg-primary/10 font-medium text-primary"
                 }}
               />
               <div className="mt-4 space-y-2">

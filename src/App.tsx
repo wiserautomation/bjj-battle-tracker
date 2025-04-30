@@ -31,12 +31,12 @@ const queryClient = new QueryClient({
   }
 });
 
-// Simplified component structure to avoid context nesting issues
+// Fixed component structure to resolve context issues
 const App = () => {
   return (
     <React.StrictMode>
-      <TooltipProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
           <AppProvider>
             <BrowserRouter>
               <Routes>
@@ -59,8 +59,8 @@ const App = () => {
               <Sonner />
             </BrowserRouter>
           </AppProvider>
-        </QueryClientProvider>
-      </TooltipProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
     </React.StrictMode>
   );
 };
