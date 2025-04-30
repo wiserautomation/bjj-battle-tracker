@@ -5,7 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import LandingPage from "./pages/LandingPage";
 import Index from "./pages/Index";
 import JournalPage from "./pages/JournalPage";
@@ -31,13 +31,13 @@ const queryClient = new QueryClient({
   }
 });
 
-// Fixing React context issues by using the correct TooltipProvider import and structure
+// Fix the provider hierarchy to resolve hook issues
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AppProvider>
-          <BrowserRouter>
+      <AppProvider>
+        <BrowserRouter>
+          <TooltipProvider>
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
@@ -56,9 +56,9 @@ const App = () => {
             </Routes>
             <Toaster />
             <Sonner />
-          </BrowserRouter>
-        </AppProvider>
-      </TooltipProvider>
+          </TooltipProvider>
+        </BrowserRouter>
+      </AppProvider>
     </QueryClientProvider>
   );
 };
