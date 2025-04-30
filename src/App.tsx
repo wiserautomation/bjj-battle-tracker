@@ -31,13 +31,13 @@ const queryClient = new QueryClient({
   }
 });
 
-// Removed React.StrictMode and reorganized providers to fix context issues
+// Fixed provider structure to ensure proper React context
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <TooltipProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <TooltipProvider>
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
@@ -56,8 +56,8 @@ const App = () => {
             </Routes>
             <Toaster />
             <Sonner />
-          </BrowserRouter>
-        </TooltipProvider>
+          </TooltipProvider>
+        </BrowserRouter>
       </AppProvider>
     </QueryClientProvider>
   );
