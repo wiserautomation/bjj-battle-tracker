@@ -31,12 +31,18 @@ const queryClient = new QueryClient({
   }
 });
 
+// Create a TooltipProviderWrapper that correctly uses the React context
+const TooltipProviderWrapper = ({ children }: { children: React.ReactNode }) => {
+  return <TooltipProvider>{children}</TooltipProvider>;
+};
+
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AppProvider>
-          <TooltipProvider>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <AppProvider>
+            {/* Move TooltipProvider inside components where it's actually needed */}
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
@@ -55,10 +61,10 @@ const App = () => {
             </Routes>
             <Toaster />
             <Sonner />
-          </TooltipProvider>
-        </AppProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+          </AppProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </React.StrictMode>
   );
 };
 
