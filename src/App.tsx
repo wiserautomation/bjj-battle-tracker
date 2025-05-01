@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -32,33 +33,34 @@ const queryClient = new QueryClient({
 
 const App = () => {
   return (
-    // Place TooltipProvider at the top level, surrounding everything
-    <TooltipProvider>
+    <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <AppProvider>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/dashboard" element={<Index />} />
-              <Route path="/journal" element={<JournalPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/calendar" element={<CalendarPage />} />
-              <Route path="/athletes" element={<AthletesPage />} />
-              <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
-              <Route path="/subscription" element={<SubscriptionPage />} />
-              <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
-              <Route path="/school-dashboard/billing" element={<SchoolBillingPage />} />
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
-            <Sonner />
-          </AppProvider>
+          <TooltipProvider>
+            <AppProvider>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/dashboard" element={<Index />} />
+                <Route path="/journal" element={<JournalPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/athletes" element={<AthletesPage />} />
+                <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
+                <Route path="/subscription" element={<SubscriptionPage />} />
+                <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
+                <Route path="/school-dashboard/billing" element={<SchoolBillingPage />} />
+                <Route path="/chat" element={<ChatPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <Toaster />
+              <Sonner />
+            </AppProvider>
+          </TooltipProvider>
         </BrowserRouter>
       </QueryClientProvider>
-    </TooltipProvider>
+    </React.StrictMode>
   );
 };
 
