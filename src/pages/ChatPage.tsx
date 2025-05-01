@@ -41,40 +41,9 @@ const ChatPage = () => {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-3 py-2 px-4 bg-accent/20">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg" alt="JU-PLAY Academy" />
-                      <AvatarFallback className="bg-bjj-navy">JA</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">JU-PLAY Academy</p>
-                      <p className="text-xs text-muted-foreground">School</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 py-2 px-4 hover:bg-accent/10 cursor-pointer">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={currentUser?.profilePicture} alt={currentUser?.name} />
-                      <AvatarFallback className="bg-bjj-blue">
-                        {currentUser?.name?.substring(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">{currentUser?.name} (You)</p>
-                      <p className="text-xs text-muted-foreground">
-                        {currentUser?.role === "athlete" ? "Athlete" : "School"}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 py-2 px-4 hover:bg-accent/10 cursor-pointer">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg" alt="Coach Mike" />
-                      <AvatarFallback className="bg-bjj-black">MC</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">Mike Coach</p>
-                      <p className="text-xs text-muted-foreground">Coach • Black Belt</p>
-                    </div>
-                  </div>
+                  <p className="text-center text-muted-foreground py-4">
+                    No members available yet.
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -86,43 +55,9 @@ const ChatPage = () => {
               </CardHeader>
               <CardContent className="flex-1 overflow-auto">
                 <div className="flex flex-col space-y-4">
-                  <div className="bg-accent/10 self-start rounded-lg p-3 max-w-[80%]">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src="/placeholder.svg" alt="JU-PLAY Academy" />
-                        <AvatarFallback className="bg-bjj-navy">JA</AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm font-medium">JU-PLAY Academy</span>
-                      <span className="text-xs text-muted-foreground">12:07 PM</span>
-                    </div>
-                    <p>Welcome to the school chat! This is where we'll share important announcements and you can ask questions.</p>
-                  </div>
-                  
-                  <div className="bg-primary/10 self-end rounded-lg p-3 max-w-[80%]">
-                    <div className="flex items-center justify-end gap-2 mb-1">
-                      <span className="text-xs text-muted-foreground">12:07 AM</span>
-                      <span className="text-sm font-medium">{currentUser?.name}</span>
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src={currentUser?.profilePicture} alt={currentUser?.name} />
-                        <AvatarFallback className="bg-bjj-blue">
-                          {currentUser?.name?.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <p>Thanks coach! Quick question - will there be classes on the holiday next week?</p>
-                  </div>
-                  
-                  <div className="bg-accent/10 self-start rounded-lg p-3 max-w-[80%]">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src="/placeholder.svg" alt="JU-PLAY Academy" />
-                        <AvatarFallback className="bg-bjj-navy">JA</AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm font-medium">JU-PLAY Academy</span>
-                      <span className="text-xs text-muted-foreground">1:07 AM</span>
-                    </div>
-                    <p>Yes, we'll be running a special open mat session from 10am-12pm on the holiday.</p>
-                  </div>
+                  <p className="text-center text-muted-foreground py-12">
+                    No messages yet. Be the first to send a message to your school!
+                  </p>
                 </div>
               </CardContent>
               <div className="p-4 border-t">

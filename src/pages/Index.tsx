@@ -1,29 +1,18 @@
 
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import ChallengesList from "@/components/challenges/ChallengesList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentJournalEntries from "@/components/dashboard/RecentJournalEntries";
 import AchievementsList from "@/components/dashboard/AchievementsList";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { format, addMonths } from "date-fns";
-
-interface RankedAthlete {
-  id: string;
-  name: string;
-  belt: string;
-  stripes: number;
-  points: number;
-  profilePicture?: string;
-}
 
 const Index = () => {
   const { currentUser, getChallengesByAthlete, getAthleteResults, hasSchool } = useApp();
@@ -32,12 +21,13 @@ const Index = () => {
   const isAthlete = currentUser?.role === 'athlete';
   const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
   
-  // Calculate stats for athlete - all zeroes until the user joins a school
-  let activeChallenges = 0;
-  let completedChallenges = 0;
-  let totalPoints = 0;
-  let unreadMessages = 0;
-  let notifications = 0;
+  // All metrics are zero until user joins a school
+  const activeChallenges = 0;
+  const completedChallenges = 0;
+  const totalPoints = 0;
+  const unreadMessages = 0;
+  const notifications = 0;
+  const userRank = 0;
   
   useEffect(() => {
     // For administrators, redirect to the admin panel
@@ -46,42 +36,7 @@ const Index = () => {
     }
   }, [currentUser, navigate]);
   
-  if (isAthlete && hasJoinedSchool && currentUser) {
-    const challenges = getChallengesByAthlete(currentUser.id);
-    const now = new Date();
-    
-    activeChallenges = challenges.filter(challenge => {
-      const startDate = new Date(challenge.startDate);
-      const endDate = new Date(challenge.endDate);
-      return now >= startDate && now <= endDate;
-    }).length;
-    
-    completedChallenges = challenges.filter(challenge => {
-      return new Date() > new Date(challenge.endDate);
-    }).length;
-    
-    const results = getAthleteResults(currentUser.id);
-    totalPoints = results.reduce((sum, result) => sum + result.points, 0);
-
-    // These would come from real messaging and notification systems in a production app
-    unreadMessages = 3;
-    notifications = 2;
-  }
-  
-  // Mock ranked athletes data only if user has joined a school
-  const rankedAthletes: RankedAthlete[] = hasJoinedSchool && currentUser ? [
-    { id: "athlete-1", name: "Alex Johnson", belt: "purple", stripes: 2, points: 840, profilePicture: currentUser.profilePicture },
-    { id: "athlete-2", name: "Sarah Williams", belt: "blue", stripes: 4, points: 720 },
-    { id: "athlete-3", name: "Mike Brown", belt: "blue", stripes: 3, points: 580 },
-    { id: "athlete-4", name: "Emma Davis", belt: "white", stripes: 4, points: 520 },
-    { id: "athlete-5", name: "Ryan Clark", belt: "white", stripes: 3, points: 460 },
-    { id: currentUser.id, name: `${currentUser.name} (You)`, belt: (currentUser as any)?.belt || 'blue', stripes: (currentUser as any)?.stripes || 2, points: 380, profilePicture: currentUser.profilePicture },
-  ] : [];
-  
-  // Find user rank - always #6 (last) in sample data or 0 if not joined
-  const userRank = hasJoinedSchool ? 6 : 0;
-  
-  // Mock payment date for notification
+  // Mock payment date for notification - only shown if school joined
   const paymentDate = addMonths(new Date(), 1);
   const showPaymentNotification = hasJoinedSchool;
   
@@ -124,7 +79,7 @@ const Index = () => {
             <StatCard 
               title="Your Rank" 
               value={`#${userRank}`} 
-              description={`of ${rankedAthletes.length} athletes`}
+              description="Join a school to rank"
               icon={<Trophy className="h-4 w-4" />} 
               className="col-span-1"
             />
@@ -168,50 +123,9 @@ const Index = () => {
                     <CardTitle>School Rankings</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-2">
-                      {rankedAthletes.map((athlete, index) => {
-                        const isCurrentUser = athlete.id === currentUser?.id;
-                        return (
-                          <div 
-                            key={athlete.id}
-                            className={`flex items-center justify-between p-3 rounded-md ${
-                              isCurrentUser ? "bg-muted" : "hover:bg-accent"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className={`flex items-center justify-center h-7 w-7 rounded-full ${
-                                index < 3 ? "bg-bjj-gold text-white" : "bg-muted-foreground/20"
-                              } font-bold text-sm`}>
-                                {index + 1}
-                              </div>
-                              <Avatar>
-                                <AvatarImage src={athlete.profilePicture} alt={athlete.name} />
-                                <AvatarFallback className={`bg-bjj-${athlete.belt}`}>
-                                  {athlete.name.substring(0, 2).toUpperCase()}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <p className="font-medium">
-                                  {athlete.name}
-                                </p>
-                                <div className="flex items-center gap-1 mt-1">
-                                  <Badge variant="outline" className="capitalize">
-                                    {athlete.belt} Belt
-                                  </Badge>
-                                  {Array.from({ length: athlete.stripes }).map((_, i) => (
-                                    <span key={i} className="inline-block h-2 w-2 bg-bjj-gold rounded-full"></span>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <p className="font-bold text-xl">{athlete.points}</p>
-                              <p className="text-xs text-muted-foreground">points</p>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
+                    <p className="text-center text-muted-foreground py-4">
+                      Complete challenges to earn points and improve your ranking.
+                    </p>
                   </CardContent>
                 </Card>
               </TabsContent>
