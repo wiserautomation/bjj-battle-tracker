@@ -32,7 +32,7 @@ const Index = () => {
   const isAthlete = currentUser?.role === 'athlete';
   const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
   
-  // Calculate stats for athlete
+  // Calculate stats for athlete - all zeroes until the user joins a school
   let activeChallenges = 0;
   let completedChallenges = 0;
   let totalPoints = 0;
@@ -64,17 +64,22 @@ const Index = () => {
     totalPoints = results.reduce((sum, result) => sum + result.points, 0);
 
     // These would come from real messaging and notification systems in a production app
-    unreadMessages = 0;
-    notifications = 0;
+    unreadMessages = 3;
+    notifications = 2;
   }
   
   // Mock ranked athletes data only if user has joined a school
   const rankedAthletes: RankedAthlete[] = hasJoinedSchool && currentUser ? [
-    { id: currentUser.id, name: currentUser.name, belt: (currentUser as any)?.belt || 'white', stripes: (currentUser as any)?.stripes || 0, points: totalPoints, profilePicture: currentUser.profilePicture },
+    { id: "athlete-1", name: "Alex Johnson", belt: "purple", stripes: 2, points: 840, profilePicture: currentUser.profilePicture },
+    { id: "athlete-2", name: "Sarah Williams", belt: "blue", stripes: 4, points: 720 },
+    { id: "athlete-3", name: "Mike Brown", belt: "blue", stripes: 3, points: 580 },
+    { id: "athlete-4", name: "Emma Davis", belt: "white", stripes: 4, points: 520 },
+    { id: "athlete-5", name: "Ryan Clark", belt: "white", stripes: 3, points: 460 },
+    { id: currentUser.id, name: `${currentUser.name} (You)`, belt: (currentUser as any)?.belt || 'blue', stripes: (currentUser as any)?.stripes || 2, points: 380, profilePicture: currentUser.profilePicture },
   ] : [];
   
-  // Find user rank - always #1 if they're the only one
-  const userRank = hasJoinedSchool ? 1 : 0;
+  // Find user rank - always #6 (last) in sample data or 0 if not joined
+  const userRank = hasJoinedSchool ? 6 : 0;
   
   // Mock payment date for notification
   const paymentDate = addMonths(new Date(), 1);
@@ -187,7 +192,7 @@ const Index = () => {
                               </Avatar>
                               <div>
                                 <p className="font-medium">
-                                  {athlete.name} {isCurrentUser && "(You)"}
+                                  {athlete.name}
                                 </p>
                                 <div className="flex items-center gap-1 mt-1">
                                   <Badge variant="outline" className="capitalize">

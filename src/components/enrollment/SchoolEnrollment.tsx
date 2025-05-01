@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { School } from "@/types";
-import { Search, MapPin } from "lucide-react";
+import { Search, MapPin, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -15,6 +15,7 @@ const SchoolEnrollment = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [nearbySchools, setNearbySchools] = useState<School[]>([]);
   const [isJoining, setIsJoining] = useState(false);
+  const [joiningSchoolId, setJoiningSchoolId] = useState<string | null>(null);
   const { getSchools, currentUser, joinSchool } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -39,6 +40,7 @@ const SchoolEnrollment = () => {
     if (!currentUser) return;
     
     setIsJoining(true);
+    setJoiningSchoolId(schoolId);
     
     try {
       await joinSchool(currentUser.id, schoolId);
@@ -57,6 +59,7 @@ const SchoolEnrollment = () => {
       });
     } finally {
       setIsJoining(false);
+      setJoiningSchoolId(null);
     }
   };
   
@@ -78,8 +81,11 @@ const SchoolEnrollment = () => {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setIsSearching(true);
+                if (e.target.value) {
+                  setIsSearching(true);
+                }
               }}
+              autoFocus
             />
           </div>
           
@@ -92,19 +98,27 @@ const SchoolEnrollment = () => {
                   <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
                     <div>
                       <p className="font-medium">{school.name}</p>
-                      {school.location && (
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          <span>{school.location}</span>
-                        </div>
-                      )}
+                      <div className="flex flex-col gap-1 mt-1">
+                        {school.location && (
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            <span>{school.location}</span>
+                          </div>
+                        )}
+                        {school.athletes && (
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Users className="h-3 w-3 mr-1" />
+                            <span>{school.athletes.length} members</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <Button 
                       size="sm" 
                       onClick={() => handleJoinSchool(school.id)}
                       disabled={isJoining}
                     >
-                      {isJoining ? "Joining..." : "Join"}
+                      {isJoining && joiningSchoolId === school.id ? "Joining..." : "Join"}
                     </Button>
                   </div>
                 ))
@@ -117,19 +131,27 @@ const SchoolEnrollment = () => {
                 <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
                   <div>
                     <p className="font-medium">{school.name}</p>
-                    {school.location && (
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        <span>{school.location}</span>
-                      </div>
-                    )}
+                    <div className="flex flex-col gap-1 mt-1">
+                      {school.location && (
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          <span>{school.location}</span>
+                        </div>
+                      )}
+                      {school.athletes && (
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Users className="h-3 w-3 mr-1" />
+                          <span>{school.athletes.length} members</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <Button 
                     size="sm" 
                     onClick={() => handleJoinSchool(school.id)}
                     disabled={isJoining}
                   >
-                    {isJoining ? "Joining..." : "Join"}
+                    {isJoining && joiningSchoolId === school.id ? "Joining..." : "Join"}
                   </Button>
                 </div>
               ))}
