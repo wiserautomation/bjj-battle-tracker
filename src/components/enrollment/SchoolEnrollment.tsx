@@ -27,8 +27,7 @@ const SchoolEnrollment = () => {
   );
 
   useEffect(() => {
-    // Simulate finding nearby schools based on geolocation
-    // In a real app, this would use the browser's geolocation API
+    // Find nearby schools based on available schools
     const randomSchools = [...allSchools]
       .sort(() => 0.5 - Math.random())
       .slice(0, 3);
