@@ -2,6 +2,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Athlete, Badge, Challenge, ChallengeResult, JournalEntry, School, User } from '../types';
 import { mockDataService } from '../services/mockData';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface LogAchievementParams {
   challengeId: string;
@@ -31,14 +33,94 @@ interface AppContextType {
   joinSchool: (athleteId: string, schoolId: string) => Promise<void>;
   hasSchool: (athleteId: string) => boolean;
   addJournalEntry: (entry: Partial<JournalEntry>) => void;
+  logout: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(mockDataService.getCurrentUser());
-  const [loading, setLoading] = useState(false);
-  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(mockDataService.getJournalEntriesByAthlete(currentUser?.id || ''));
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const { toast } = useToast();
+
+  // Check for authenticated user on mount
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        // Check current auth session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          // Try to get user data from Supabase
+          const { data: userData } = await supabase.auth.getUser();
+          
+          if (userData?.user) {
+            // Extract relevant user information from metadata
+            const metadata = userData.user.user_metadata;
+            
+            // Create user object with data from Supabase
+            const user: User = {
+              id: userData.user.id,
+              name: metadata?.name || "Unknown User",
+              email: userData.user.email || "",
+              role: metadata?.role || "athlete",
+              profilePicture: metadata?.avatar_url || "/placeholder.svg",
+              schoolId: metadata?.schoolId || null
+            };
+            
+            setCurrentUser(user);
+          } else {
+            // Fallback to mock data if needed
+            setCurrentUser(mockDataService.getCurrentUser());
+          }
+        } else {
+          // No active session
+          setCurrentUser(null);
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        toast({
+          title: "Authentication Error",
+          description: "There was a problem checking your login status.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    checkUser();
+    
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          const { data: userData } = await supabase.auth.getUser();
+          if (userData?.user) {
+            const metadata = userData.user.user_metadata;
+            
+            const user: User = {
+              id: userData.user.id,
+              name: metadata?.name || "Unknown User",
+              email: userData.user.email || "",
+              role: metadata?.role || "athlete",
+              profilePicture: metadata?.avatar_url || "/placeholder.svg",
+              schoolId: metadata?.schoolId || null
+            };
+            
+            setCurrentUser(user);
+          }
+        } else if (event === 'SIGNED_OUT') {
+          setCurrentUser(null);
+        }
+      }
+    );
+    
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [toast]);
 
   const logChallengeAchievement = ({ challengeId, count, notes }: LogAchievementParams) => {
     if (!currentUser || currentUser.role !== 'athlete') return;
@@ -70,6 +152,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   const hasSchool = (athleteId: string) => {
+    if (currentUser && currentUser.id === athleteId) {
+      return !!currentUser.schoolId;
+    }
     const athlete = mockDataService.getAthleteById(athleteId);
     return !!athlete?.schoolId;
   };
@@ -102,6 +187,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setJournalEntries(prev => [newEntry, ...prev]);
   };
 
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setCurrentUser(null);
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Error signing out:", error);
+      return Promise.reject(error);
+    }
+  };
+
   const value = {
     currentUser,
     loading,
@@ -128,7 +224,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     logChallengeAchievement,
     joinSchool,
     hasSchool,
-    addJournalEntry
+    addJournalEntry,
+    logout
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useApp } from "@/context/AppContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, User } from "lucide-react";
+import { Bell, User, LogOut } from "lucide-react";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -12,24 +12,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Athlete } from "@/types";
 
 const Header = () => {
-  const { currentUser } = useApp();
+  const { currentUser, logout } = useApp();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   if (!currentUser) return null;
 
   const handleSignOut = async () => {
     try {
-      await supabase.auth.signOut();
+      await logout();
       toast({
         title: "Signed out successfully",
         description: "You have been logged out of your account"
       });
+      navigate('/auth');
     } catch (error) {
       toast({
         variant: "destructive",
@@ -96,7 +97,8 @@ const Header = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut}>
-              Log out
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

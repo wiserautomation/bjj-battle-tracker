@@ -2,26 +2,32 @@
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell } from "lucide-react";
+import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell, Search, MapPin } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import ChallengesList from "@/components/challenges/ChallengesList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentJournalEntries from "@/components/dashboard/RecentJournalEntries";
 import AchievementsList from "@/components/dashboard/AchievementsList";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { format, addMonths } from "date-fns";
+import { Input } from "@/components/ui/input";
+import { School } from "@/types";
 
 const Index = () => {
-  const { currentUser, getChallengesByAthlete, getAthleteResults, hasSchool } = useApp();
+  const { currentUser, getChallengesByAthlete, getAthleteResults, hasSchool, getSchools } = useApp();
   const navigate = useNavigate();
+  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [filteredSchools, setFilteredSchools] = useState<School[]>([]);
   
   const isAthlete = currentUser?.role === 'athlete';
   const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
   
-  // All metrics are zero until user joins a school
+  // All metrics should be zero until user joins a school
   const activeChallenges = 0;
   const completedChallenges = 0;
   const totalPoints = 0;
@@ -34,7 +40,14 @@ const Index = () => {
     if (currentUser?.role === 'admin') {
       navigate('/admin');
     }
-  }, [currentUser, navigate]);
+    
+    // Update filtered schools when search term changes
+    const allSchools = getSchools();
+    setFilteredSchools(allSchools.filter(
+      school => school.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (school.location && school.location.toLowerCase().includes(searchTerm.toLowerCase()))
+    ));
+  }, [currentUser, navigate, searchTerm, getSchools]);
   
   // Mock payment date for notification - only shown if school joined
   const paymentDate = addMonths(new Date(), 1);

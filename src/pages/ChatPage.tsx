@@ -28,7 +28,17 @@ const ChatPage = () => {
         </div>
         
         {!hasJoinedSchool ? (
-          <SchoolEnrollment />
+          <div className="space-y-6">
+            <Card>
+              <CardContent className="p-8 text-center">
+                <h3 className="text-xl font-medium mb-2">Join a School First</h3>
+                <p className="text-muted-foreground mb-4">
+                  You need to join a school to access the chat and connect with coaches and teammates.
+                </p>
+              </CardContent>
+            </Card>
+            <SchoolEnrollment />
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-[calc(100vh-240px)]">
             {/* Member list sidebar */}

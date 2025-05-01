@@ -9,6 +9,7 @@ import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useApp } from "@/context/AppContext";
 
 const AuthPage = () => {
   const [searchParams] = useSearchParams();
@@ -23,6 +24,7 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { setCurrentUser } = useApp();
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +47,20 @@ const AuthPage = () => {
       });
 
       if (error) throw error;
+
+      if (data.user) {
+        // Create user object to update context
+        const newUser: User = {
+          id: data.user.id,
+          name: name,
+          email: data.user.email || "",
+          role: accountType,
+          profilePicture: "/placeholder.svg",
+          schoolId: null
+        };
+        
+        setCurrentUser(newUser);
+      }
 
       toast({
         title: "Account created successfully!",
@@ -75,6 +91,27 @@ const AuthPage = () => {
       });
 
       if (error) throw error;
+
+      // If we have user data, update the context
+      if (data.user) {
+        // Get user metadata to create proper user object
+        const { data: userData } = await supabase.auth.getUser();
+        
+        if (userData?.user) {
+          const metadata = userData.user.user_metadata;
+          
+          const user: User = {
+            id: userData.user.id,
+            name: metadata?.name || "Unknown User",
+            email: userData.user.email || "",
+            role: metadata?.role || "athlete",
+            profilePicture: metadata?.avatar_url || "/placeholder.svg",
+            schoolId: metadata?.schoolId || null
+          };
+          
+          setCurrentUser(user);
+        }
+      }
 
       toast({
         title: "Login successful!",
