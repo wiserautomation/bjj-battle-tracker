@@ -1,15 +1,15 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { School, User, Mail } from "lucide-react";
+import { School, Mail, UserIcon } from "lucide-react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useApp } from "@/context/AppContext";
+import { User } from "@/types";
 
 const AuthPage = () => {
   const [searchParams] = useSearchParams();
@@ -174,7 +174,7 @@ const AuthPage = () => {
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="login" className="space-y-4">
+            <TabsContent value="login">
               <form onSubmit={handleEmailLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
@@ -234,7 +234,7 @@ const AuthPage = () => {
                   className="flex flex-col items-center gap-2 p-4 h-auto"
                   onClick={() => setAccountType("athlete")}
                 >
-                  <User className="h-5 w-5" />
+                  <UserIcon className="h-5 w-5" />
                   <span>Athlete</span>
                 </Button>
                 <Button 
