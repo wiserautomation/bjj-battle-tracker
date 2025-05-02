@@ -32,10 +32,11 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  // Ensure we wrap the entire app with TooltipProvider only once
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={200}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
