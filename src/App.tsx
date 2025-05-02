@@ -36,9 +36,8 @@ const App = () => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <AppProvider>
-          {/* Use React.StrictMode to wrap TooltipProvider */}
-          <TooltipProvider delayDuration={100}>
-            <BrowserRouter>
+          <BrowserRouter>
+            <TooltipProvider>
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<AuthPage />} />
@@ -57,8 +56,8 @@ const App = () => {
               </Routes>
               <Toaster />
               <Sonner />
-            </BrowserRouter>
-          </TooltipProvider>
+            </TooltipProvider>
+          </BrowserRouter>
         </AppProvider>
       </QueryClientProvider>
     </React.StrictMode>
