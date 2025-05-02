@@ -19,6 +19,7 @@ import SchoolDashboardPage from "./pages/SchoolDashboardPage";
 import SchoolBillingPage from "./pages/SchoolBillingPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // Create a single queryClient instance with default options
 const queryClient = new QueryClient({
@@ -34,26 +35,28 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/dashboard" element={<Index />} />
-            <Route path="/journal" element={<JournalPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/athletes" element={<AthletesPage />} />
-            <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
-            <Route path="/subscription" element={<SubscriptionPage />} />
-            <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
-            <Route path="/school-dashboard/billing" element={<SchoolBillingPage />} />
-            <Route path="/chat" element={<ChatPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Toaster />
-          <Sonner />
-        </BrowserRouter>
+        <TooltipProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/dashboard" element={<Index />} />
+              <Route path="/journal" element={<JournalPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/calendar" element={<CalendarPage />} />
+              <Route path="/athletes" element={<AthletesPage />} />
+              <Route path="/challenge/:id" element={<ChallengeDetailPage />} />
+              <Route path="/subscription" element={<SubscriptionPage />} />
+              <Route path="/school-dashboard" element={<SchoolDashboardPage />} />
+              <Route path="/school-dashboard/billing" element={<SchoolBillingPage />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Toaster />
+            <Sonner />
+          </BrowserRouter>
+        </TooltipProvider>
       </AppProvider>
     </QueryClientProvider>
   );
