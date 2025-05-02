@@ -2,27 +2,19 @@
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell, Search, MapPin } from "lucide-react";
+import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import ChallengesList from "@/components/challenges/ChallengesList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentJournalEntries from "@/components/dashboard/RecentJournalEntries";
 import AchievementsList from "@/components/dashboard/AchievementsList";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { format, addMonths } from "date-fns";
-import { Input } from "@/components/ui/input";
-import { School } from "@/types";
 
 const Index = () => {
-  const { currentUser, getChallengesByAthlete, getAthleteResults, hasSchool, getSchools } = useApp();
+  const { currentUser, hasSchool } = useApp();
   const navigate = useNavigate();
-  
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-  const [filteredSchools, setFilteredSchools] = useState<School[]>([]);
   
   const isAthlete = currentUser?.role === 'athlete';
   const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
@@ -41,38 +33,24 @@ const Index = () => {
       navigate('/admin');
     }
     
-    // Update filtered schools when search term changes
-    const allSchools = getSchools();
-    setFilteredSchools(allSchools.filter(
-      school => school.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (school.location && school.location.toLowerCase().includes(searchTerm.toLowerCase()))
-    ));
-  }, [currentUser, navigate, searchTerm, getSchools]);
-  
-  // Mock payment date for notification - only shown if school joined
-  const paymentDate = addMonths(new Date(), 1);
-  const showPaymentNotification = hasJoinedSchool;
+    // For schools, redirect to the school dashboard
+    if (currentUser?.role === 'school') {
+      navigate('/school-dashboard');
+    }
+  }, [currentUser, navigate]);
   
   return (
     <MainLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-1">Welcome to JU-PLAY{currentUser ? `, ${currentUser.name}` : ''}</h1>
+          <h1 className="text-3xl font-bold mb-1">
+            Welcome to JU-PLAY{currentUser ? `, ${currentUser.name}` : ''}
+          </h1>
           <p className="text-muted-foreground">Track your progress and conquer new challenges</p>
         </div>
         
         {isAthlete && !hasJoinedSchool && (
           <SchoolEnrollment />
-        )}
-        
-        {showPaymentNotification && (
-          <div className="bg-amber-50 border border-amber-200 p-4 rounded-md flex items-center justify-between">
-            <div>
-              <h3 className="font-medium text-amber-800">Payment Reminder</h3>
-              <p className="text-amber-700 text-sm">Your next monthly payment is due on {format(paymentDate, 'MMMM d, yyyy')}</p>
-            </div>
-            <Button variant="outline" size="sm">View Details</Button>
-          </div>
         )}
         
         {(isAthlete && hasJoinedSchool) && (

@@ -51,7 +51,9 @@ const Header = () => {
   return (
     <header className="h-16 border-b flex items-center justify-between px-4 bg-card">
       <div className="flex items-center gap-2">
-        <h1 className="text-xl font-bold md:text-2xl">JU-PLAY</h1>
+        <Link to={currentUser.role === 'school' ? "/school-dashboard" : "/dashboard"}>
+          <h1 className="text-xl font-bold md:text-2xl">JU-PLAY</h1>
+        </Link>
       </div>
       
       <div className="flex items-center gap-3">
@@ -71,7 +73,12 @@ const Header = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {currentUser.name}
+              <p className="text-xs font-normal text-muted-foreground">
+                {currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}
+              </p>
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>

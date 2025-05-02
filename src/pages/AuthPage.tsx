@@ -1,15 +1,16 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { School, Mail, UserIcon } from "lucide-react";
+import { School, Mail, UserCircle } from "lucide-react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useApp } from "@/context/AppContext";
-import { User } from "@/types";
+import type { User } from "@/types";
 
 const AuthPage = () => {
   const [searchParams] = useSearchParams();
@@ -52,7 +53,7 @@ const AuthPage = () => {
         // Create user object to update context
         const newUser: User = {
           id: data.user.id,
-          name: name,
+          name: name, // Use the name from the form
           email: data.user.email || "",
           role: accountType,
           profilePicture: "/placeholder.svg",
@@ -60,15 +61,15 @@ const AuthPage = () => {
         };
         
         setCurrentUser(newUser);
+        
+        toast({
+          title: "Account created successfully!",
+          description: `Welcome to JU-PLAY, ${name}!`,
+        });
+        
+        // Redirect to dashboard after successful signup
+        navigate("/dashboard");
       }
-
-      toast({
-        title: "Account created successfully!",
-        description: "You can now log in with your credentials.",
-      });
-
-      // Redirect to dashboard after successful signup
-      navigate("/dashboard");
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -110,16 +111,16 @@ const AuthPage = () => {
           };
           
           setCurrentUser(user);
+          
+          toast({
+            title: "Login successful!",
+            description: `Welcome back, ${metadata?.name}!`,
+          });
+          
+          // Redirect to dashboard after login
+          navigate("/dashboard");
         }
       }
-
-      toast({
-        title: "Login successful!",
-        description: "Welcome back!",
-      });
-      
-      // Redirect to dashboard after login
-      navigate("/dashboard");
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -234,7 +235,7 @@ const AuthPage = () => {
                   className="flex flex-col items-center gap-2 p-4 h-auto"
                   onClick={() => setAccountType("athlete")}
                 >
-                  <UserIcon className="h-5 w-5" />
+                  <UserCircle className="h-5 w-5" />
                   <span>Athlete</span>
                 </Button>
                 <Button 

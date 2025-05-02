@@ -70,9 +70,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
             };
             
             setCurrentUser(user);
-          } else {
-            // Fallback to mock data if needed
-            setCurrentUser(mockDataService.getCurrentUser());
           }
         } else {
           // No active session
@@ -143,9 +140,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
           schoolId
         };
         setCurrentUser(updatedUser);
+
+        // Update user metadata in Supabase
+        const { error } = await supabase.auth.updateUser({
+          data: { schoolId }
+        });
+
+        if (error) throw error;
+        
+        toast({
+          title: "School joined successfully",
+          description: "You are now a member of this school"
+        });
+        
         return Promise.resolve();
       }
       return Promise.reject("User is not an athlete");
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Failed to join school",
+        description: error.message || "An error occurred"
+      });
+      return Promise.reject(error);
     } finally {
       setLoading(false);
     }
