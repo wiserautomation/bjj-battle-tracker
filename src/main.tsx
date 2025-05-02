@@ -10,9 +10,5 @@ if (!rootElement) throw new Error("Root element not found");
 
 const root = createRoot(rootElement);
 
-// Render the app without TooltipProvider here as it's now in App.tsx
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Remove React.StrictMode here as it's now in App.tsx
+root.render(<App />);

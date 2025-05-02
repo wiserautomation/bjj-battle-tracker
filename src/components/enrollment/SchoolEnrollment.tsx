@@ -84,27 +84,29 @@ const SchoolEnrollment = () => {
           )}
         </div>
       </div>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button 
-            size="sm" 
-            onClick={() => handleJoinSchool(school.id)}
-            disabled={isJoining}
-          >
-            {isJoining && joiningSchoolId === school.id ? (
-              <>Joining...</>
-            ) : (
-              <>
-                <CheckCircle className="mr-1 h-4 w-4" />
-                Join
-              </>
-            )}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Send a request to join this school</p>
-        </TooltipContent>
-      </Tooltip>
+      <div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              size="sm" 
+              onClick={() => handleJoinSchool(school.id)}
+              disabled={isJoining}
+            >
+              {isJoining && joiningSchoolId === school.id ? (
+                <>Joining...</>
+              ) : (
+                <>
+                  <CheckCircle className="mr-1 h-4 w-4" />
+                  Join
+                </>
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Send a request to join this school</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   );
   
