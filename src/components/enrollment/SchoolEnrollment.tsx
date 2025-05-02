@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const SchoolEnrollment = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,6 +65,49 @@ const SchoolEnrollment = () => {
     }
   };
   
+  const renderSchoolItem = (school: School) => (
+    <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
+      <div>
+        <p className="font-medium">{school.name}</p>
+        <div className="flex flex-col gap-1 mt-1">
+          {school.location && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <MapPin className="h-3 w-3 mr-1" />
+              <span>{school.location}</span>
+            </div>
+          )}
+          {school.athletes && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Users className="h-3 w-3 mr-1" />
+              <span>{school.athletes.length} members</span>
+            </div>
+          )}
+        </div>
+      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button 
+            size="sm" 
+            onClick={() => handleJoinSchool(school.id)}
+            disabled={isJoining}
+          >
+            {isJoining && joiningSchoolId === school.id ? (
+              <>Joining...</>
+            ) : (
+              <>
+                <CheckCircle className="mr-1 h-4 w-4" />
+                Join
+              </>
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Send a request to join this school</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  );
+  
   return (
     <Card className="w-full">
       <CardHeader>
@@ -96,48 +139,7 @@ const SchoolEnrollment = () => {
               {filteredSchools.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">No schools found matching your search.</p>
               ) : (
-                filteredSchools.map((school) => (
-                  <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
-                    <div>
-                      <p className="font-medium">{school.name}</p>
-                      <div className="flex flex-col gap-1 mt-1">
-                        {school.location && (
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <MapPin className="h-3 w-3 mr-1" />
-                            <span>{school.location}</span>
-                          </div>
-                        )}
-                        {school.athletes && (
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <Users className="h-3 w-3 mr-1" />
-                            <span>{school.athletes.length} members</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          size="sm" 
-                          onClick={() => handleJoinSchool(school.id)}
-                          disabled={isJoining}
-                        >
-                          {isJoining && joiningSchoolId === school.id ? (
-                            <>Joining...</>
-                          ) : (
-                            <>
-                              <CheckCircle className="mr-1 h-4 w-4" />
-                              Join
-                            </>
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Send a request to join this school</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                ))
+                filteredSchools.map(renderSchoolItem)
               )}
             </div>
           ) : (
@@ -146,41 +148,11 @@ const SchoolEnrollment = () => {
                 <h3 className="text-sm font-medium text-muted-foreground">Nearby Schools</h3>
                 <Badge variant="outline" className="text-xs">Based on your location</Badge>
               </div>
-              {nearbySchools.map((school) => (
-                <div key={school.id} className="flex items-center justify-between p-3 bg-accent/20 rounded-md">
-                  <div>
-                    <p className="font-medium">{school.name}</p>
-                    <div className="flex flex-col gap-1 mt-1">
-                      {school.location && (
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          <span>{school.location}</span>
-                        </div>
-                      )}
-                      {school.athletes && (
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Users className="h-3 w-3 mr-1" />
-                          <span>{school.athletes.length} members</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleJoinSchool(school.id)}
-                        disabled={isJoining}
-                      >
-                        {isJoining && joiningSchoolId === school.id ? "Joining..." : "Join"}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Send a request to join this school</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              ))}
+              {nearbySchools.length > 0 ? (
+                nearbySchools.map(renderSchoolItem)
+              ) : (
+                <p className="text-center text-muted-foreground py-4">No nearby schools found.</p>
+              )}
             </div>
           )}
           

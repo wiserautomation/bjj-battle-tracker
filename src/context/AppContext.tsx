@@ -34,6 +34,8 @@ interface AppContextType {
   hasSchool: (athleteId: string) => boolean;
   addJournalEntry: (entry: Partial<JournalEntry>) => void;
   logout: () => Promise<void>;
+  createChallenge: (challenge: Partial<Challenge>) => void;
+  sendNotification: (title: string, message: string, recipientIds: string[]) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -42,6 +44,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const { toast } = useToast();
 
   // Check for authenticated user on mount
@@ -214,6 +218,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return Promise.reject(error);
     }
   };
+  
+  const createChallenge = (challenge: Partial<Challenge>) => {
+    if (!currentUser || currentUser.role !== 'school') return;
+    
+    const newChallenge: Challenge = {
+      id: `challenge-${Date.now()}`,
+      title: challenge.title || 'New Challenge',
+      description: challenge.description || '',
+      type: challenge.type || 'submission',
+      startDate: challenge.startDate || new Date().toISOString(),
+      endDate: challenge.endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      createdBy: currentUser.id,
+      difficulty: challenge.difficulty || 'medium',
+      pointsSystem: challenge.pointsSystem || {
+        type: 'fixed',
+        scaling: false,
+        maxPoints: 100
+      },
+      participants: challenge.participants || []
+    };
+    
+    setChallenges(prev => [newChallenge, ...prev]);
+  };
+  
+  const sendNotification = (title: string, message: string, recipientIds: string[]) => {
+    if (!currentUser || currentUser.role !== 'school') return;
+    
+    const newNotification = {
+      id: `notification-${Date.now()}`,
+      title,
+      message,
+      createdBy: currentUser.id,
+      createdAt: new Date().toISOString(),
+      recipients: recipientIds
+    };
+    
+    setNotifications(prev => [newNotification, ...prev]);
+  };
 
   const value = {
     currentUser,
@@ -224,10 +266,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
     getAthletes: mockDataService.getAthletes,
     getAthleteById: mockDataService.getAthleteById,
     getAthletesBySchool: mockDataService.getAthletesBySchool,
-    getChallenges: mockDataService.getChallenges,
-    getChallengeById: mockDataService.getChallengeById,
-    getChallengesBySchool: mockDataService.getChallengesBySchool,
-    getChallengesByAthlete: mockDataService.getChallengesByAthlete,
+    getChallenges: () => {
+      // Return mock challenges and any created by schools
+      const mockChallenges = mockDataService.getChallenges();
+      return [...mockChallenges, ...challenges];
+    },
+    getChallengeById: (id: string) => {
+      // Check both mock challenges and created challenges
+      const customChallenge = challenges.find(c => c.id === id);
+      if (customChallenge) return customChallenge;
+      return mockDataService.getChallengeById(id);
+    },
+    getChallengesBySchool: (schoolId: string) => {
+      // Combine mock challenges and created challenges for a school
+      const mockChallenges = mockDataService.getChallengesBySchool(schoolId);
+      const createdChallenges = challenges.filter(c => c.createdBy === schoolId);
+      return [...mockChallenges, ...createdChallenges];
+    },
+    getChallengesByAthlete: (athleteId: string) => {
+      // Get challenges based on athlete's school
+      const athlete = mockDataService.getAthleteById(athleteId);
+      if (!athlete || !athlete.schoolId) return [];
+      
+      const mockChallenges = mockDataService.getChallengesBySchool(athlete.schoolId);
+      const createdChallenges = challenges.filter(c => c.createdBy === athlete.schoolId);
+      return [...mockChallenges, ...createdChallenges];
+    },
     getChallengeResults: mockDataService.getChallengeResults,
     getAthleteResults: mockDataService.getAthleteResults,
     getJournalEntriesByAthlete: (athleteId: string) => {
@@ -242,7 +306,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     joinSchool,
     hasSchool,
     addJournalEntry,
-    logout
+    logout,
+    createChallenge,
+    sendNotification
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

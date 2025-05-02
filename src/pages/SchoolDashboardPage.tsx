@@ -13,7 +13,6 @@ import { JoinRequests } from "@/components/school-dashboard/JoinRequests";
 import { ChallengeDialog } from "@/components/school-dashboard/dialogs/ChallengeDialog";
 import { NotificationDialog } from "@/components/school-dashboard/dialogs/NotificationDialog";
 import { EventDialog } from "@/components/school-dashboard/dialogs/EventDialog";
-import { ScheduleTab } from "@/components/school-dashboard/ScheduleTab";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 
@@ -29,7 +28,7 @@ interface SchoolEvent {
 }
 
 const SchoolDashboardPage = () => {
-  const { currentUser, getAthletes, getAthletesBySchool, getChallengesBySchool } = useApp();
+  const { currentUser, getAthletes, getAthletesBySchool, getChallengesBySchool, createChallenge, sendNotification } = useApp();
   const [searchTerm, setSearchTerm] = useState("");
   const [pendingRequests, setPendingRequests] = useState([
     { id: "req1", name: "John Doe", belt: "purple", stripes: 2, profilePicture: "" },
@@ -111,6 +110,20 @@ const SchoolDashboardPage = () => {
   };
   
   const onCreateChallenge = (data: any) => {
+    createChallenge({
+      title: data.title,
+      description: data.description,
+      type: data.type,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      difficulty: data.difficulty,
+      pointsSystem: {
+        type: data.pointsType,
+        scaling: data.pointsType === 'scaled',
+        maxPoints: parseInt(data.maxPoints)
+      }
+    });
+    
     toast({
       title: "Challenge created",
       description: `New challenge "${data.title}" has been created.`,
@@ -140,6 +153,12 @@ const SchoolDashboardPage = () => {
   };
   
   const onSendNotification = (data: any) => {
+    // Get all athlete IDs for sending notifications
+    const athleteIds = schoolAthletes.map(athlete => athlete.id);
+    
+    // Use the context function to send notification
+    sendNotification(data.title, data.message, athleteIds);
+    
     const newNotification = {
       id: `notif-${Date.now()}`,
       title: data.title,

@@ -1,7 +1,7 @@
 
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import ChallengesList from "@/components/challenges/ChallengesList";
@@ -11,6 +11,8 @@ import AchievementsList from "@/components/dashboard/AchievementsList";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { currentUser, hasSchool } = useApp();
@@ -19,7 +21,7 @@ const Index = () => {
   const isAthlete = currentUser?.role === 'athlete';
   const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
   
-  // All metrics should be zero until user joins a school
+  // Metrics should be zero until user joins a school
   const activeChallenges = 0;
   const completedChallenges = 0;
   const totalPoints = 0;
@@ -46,7 +48,13 @@ const Index = () => {
           <h1 className="text-3xl font-bold mb-1">
             Welcome to JU-PLAY{currentUser ? `, ${currentUser.name}` : ''}
           </h1>
-          <p className="text-muted-foreground">Track your progress and conquer new challenges</p>
+          {isAthlete && (
+            <p className="text-muted-foreground">
+              {hasJoinedSchool
+                ? "Track your progress and conquer new challenges"
+                : "Join a school to start tracking your progress and participating in challenges"}
+            </p>
+          )}
         </div>
         
         {isAthlete && !hasJoinedSchool && (
@@ -70,7 +78,7 @@ const Index = () => {
             <StatCard 
               title="Your Rank" 
               value={`#${userRank}`} 
-              description="Join a school to rank"
+              description={hasJoinedSchool ? "" : "Join a school to rank"}
               icon={<Trophy className="h-4 w-4" />} 
               className="col-span-1"
             />
@@ -95,19 +103,15 @@ const Index = () => {
           </div>
         )}
         
-        {(!isAthlete || hasJoinedSchool) ? (
-          <Tabs defaultValue={isAthlete ? "rankings" : "challenges"} className="space-y-4">
-            <TabsList>
-              {isAthlete && hasJoinedSchool && (
+        {isAthlete ? (
+          hasJoinedSchool ? (
+            <Tabs defaultValue="rankings" className="space-y-4">
+              <TabsList>
                 <TabsTrigger value="rankings">Rankings</TabsTrigger>
-              )}
-              <TabsTrigger value="challenges">Challenges</TabsTrigger>
-              {isAthlete && hasJoinedSchool && (
+                <TabsTrigger value="challenges">Challenges</TabsTrigger>
                 <TabsTrigger value="progress">Your Progress</TabsTrigger>
-              )}
-            </TabsList>
-            
-            {isAthlete && hasJoinedSchool && (
+              </TabsList>
+              
               <TabsContent value="rankings">
                 <Card>
                   <CardHeader>
@@ -120,46 +124,32 @@ const Index = () => {
                   </CardContent>
                 </Card>
               </TabsContent>
-            )}
-            
-            <TabsContent value="challenges" className="space-y-4">
-              {isAthlete ? (
-                hasJoinedSchool ? (
-                  <ChallengesList />
-                ) : (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>No Challenges Available</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p>Join a school to see and participate in challenges.</p>
-                    </CardContent>
-                  </Card>
-                )
-              ) : (
+              
+              <TabsContent value="challenges" className="space-y-4">
                 <ChallengesList />
-              )}
-            </TabsContent>
-            
-            {isAthlete && hasJoinedSchool && (
+              </TabsContent>
+              
               <TabsContent value="progress">
                 <div className="grid md:grid-cols-2 gap-4">
                   <RecentJournalEntries />
                   <AchievementsList />
                 </div>
               </TabsContent>
-            )}
-          </Tabs>
-        ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Getting Started</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>To access all features like challenges, rankings, and journal tracking, please join a school first.</p>
-            </CardContent>
-          </Card>
-        )}
+            </Tabs>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Getting Started</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p>To access all features like challenges, rankings, and journal tracking, please join a school first.</p>
+                <Button asChild variant="default">
+                  <Link to="/dashboard">Join a School</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )
+        ) : null}
       </div>
     </MainLayout>
   );

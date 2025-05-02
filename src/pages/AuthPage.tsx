@@ -38,7 +38,7 @@ const AuthPage = () => {
         password,
         options: {
           data: {
-            name,
+            name, // Use the name from the form input
             role: accountType,
             ...(accountType === "athlete" 
               ? { belt, stripes: Number(stripes) } 
@@ -53,7 +53,7 @@ const AuthPage = () => {
         // Create user object to update context
         const newUser: User = {
           id: data.user.id,
-          name: name, // Use the name from the form
+          name: name, // Use the name from the form input
           email: data.user.email || "",
           role: accountType,
           profilePicture: "/placeholder.svg",
@@ -103,7 +103,7 @@ const AuthPage = () => {
           
           const user: User = {
             id: userData.user.id,
-            name: metadata?.name || "Unknown User",
+            name: metadata?.name || "Unknown User", // Use name from metadata
             email: userData.user.email || "",
             role: metadata?.role || "athlete",
             profilePicture: metadata?.avatar_url || "/placeholder.svg",
@@ -114,7 +114,7 @@ const AuthPage = () => {
           
           toast({
             title: "Login successful!",
-            description: `Welcome back, ${metadata?.name}!`,
+            description: `Welcome back, ${metadata?.name || "User"}!`,
           });
           
           // Redirect to dashboard after login
@@ -368,7 +368,7 @@ const AuthPage = () => {
         </CardFooter>
       </Card>
     </div>
-  );
-};
+  )
+}
 
 export default AuthPage;
