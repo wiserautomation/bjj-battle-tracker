@@ -7,6 +7,7 @@ import { School } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const AthletesPage = () => {
   const { currentUser, getAthletesBySchool } = useApp();
