@@ -35,7 +35,8 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <TooltipProvider>
+        {/* Set delayDuration to prevent immediate showing of tooltip */}
+        <TooltipProvider delayDuration={100}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
