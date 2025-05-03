@@ -35,7 +35,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={300}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
