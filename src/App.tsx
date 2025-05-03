@@ -5,7 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import LandingPage from "./pages/LandingPage";
 import Index from "./pages/Index";
 import JournalPage from "./pages/JournalPage";
@@ -34,7 +34,7 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+      <TooltipPrimitive.Provider delayDuration={300}>
         <AppProvider>
           <BrowserRouter>
             <Routes>
@@ -57,7 +57,7 @@ const App = () => {
             <Sonner />
           </BrowserRouter>
         </AppProvider>
-      </TooltipProvider>
+      </TooltipPrimitive.Provider>
     </QueryClientProvider>
   );
 };
