@@ -35,7 +35,6 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        {/* Make sure we're wrapping everything with TooltipProvider properly */}
         <TooltipProvider>
           <BrowserRouter>
             <Routes>
