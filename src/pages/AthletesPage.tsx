@@ -79,7 +79,14 @@ const AthletesPage = () => {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Email</span>
-                      <span className="font-medium">{athlete.email}</span>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="font-medium cursor-help">{athlete.email}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Email address</p>
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                     {athlete.weight && (
                       <div className="flex justify-between">

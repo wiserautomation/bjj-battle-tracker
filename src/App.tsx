@@ -19,7 +19,7 @@ import SchoolDashboardPage from "./pages/SchoolDashboardPage";
 import SchoolBillingPage from "./pages/SchoolBillingPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
-import { TooltipProvider } from "./components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // Create a single queryClient instance with default options
 const queryClient = new QueryClient({
