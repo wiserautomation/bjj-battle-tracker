@@ -19,7 +19,7 @@ import SchoolDashboardPage from "./pages/SchoolDashboardPage";
 import SchoolBillingPage from "./pages/SchoolBillingPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 // Create a single queryClient instance with default options
 const queryClient = new QueryClient({
@@ -34,8 +34,8 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <React.StrictMode>
-      <TooltipProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
           <AppProvider>
             <BrowserRouter>
               <Routes>
@@ -58,8 +58,8 @@ const App = () => {
               <Sonner />
             </BrowserRouter>
           </AppProvider>
-        </QueryClientProvider>
-      </TooltipProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
     </React.StrictMode>
   );
 };
