@@ -26,10 +26,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     );
   }
 
-  // Add additional styles for native apps including iOS safe areas
-  const nativeAppStyles = isNativeApp ? 
-    "pt-safe-top pb-safe-bottom pl-safe-left pr-safe-right" : "";
-
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
