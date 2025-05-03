@@ -14,6 +14,7 @@ import { NotificationDialog } from "@/components/school-dashboard/dialogs/Notifi
 import { EventDialog } from "@/components/school-dashboard/dialogs/EventDialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 interface SchoolEvent {
   id: string;
@@ -28,6 +29,7 @@ interface SchoolEvent {
 
 const SchoolDashboardPage = () => {
   const { currentUser, getAthletes, getAthletesBySchool, getChallengesBySchool, createChallenge, sendNotification } = useApp();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [pendingRequests, setPendingRequests] = useState([
     { id: "req1", name: "John Doe", belt: "purple", stripes: 2, profilePicture: "" },
@@ -81,7 +83,7 @@ const SchoolDashboardPage = () => {
     if (currentUser && currentUser.role !== 'school') {
       navigate('/dashboard');
     }
-  }, [currentUser]);
+  }, [currentUser, navigate]);
   
   if (!currentUser || currentUser.role !== 'school') {
     return (

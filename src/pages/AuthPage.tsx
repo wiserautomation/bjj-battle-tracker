@@ -54,7 +54,7 @@ const AuthPage = () => {
           id: data.user.id,
           name: name, // Use the name from the form input
           email: data.user.email || "",
-          role: accountType,
+          role: accountType, // Ensure role is correctly set
           profilePicture: "/placeholder.svg",
           schoolId: null
         };
@@ -104,11 +104,13 @@ const AuthPage = () => {
         if (userData?.user) {
           const metadata = userData.user.user_metadata;
           
+          const role = metadata?.role || "athlete";
+          
           const user: User = {
             id: userData.user.id,
             name: metadata?.name || "Unknown User", // Use name from metadata
             email: userData.user.email || "",
-            role: metadata?.role || "athlete",
+            role: role,
             profilePicture: metadata?.avatar_url || "/placeholder.svg",
             schoolId: metadata?.schoolId || null
           };
@@ -120,10 +122,11 @@ const AuthPage = () => {
             description: `Welcome back, ${metadata?.name || "User"}!`,
           });
           
-          // Redirect based on role
-          if (metadata?.role === "school") {
+          // Make sure to explicitly redirect based on role
+          console.log("Redirecting based on role:", role);
+          if (role === "school") {
             navigate("/school-dashboard");
-          } else if (metadata?.role === "admin") {
+          } else if (role === "admin") {
             navigate("/admin");
           } else {
             navigate("/dashboard");

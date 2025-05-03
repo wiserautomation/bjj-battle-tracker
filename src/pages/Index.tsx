@@ -34,6 +34,7 @@ const Index = () => {
     // For administrators, redirect to the admin panel
     if (currentUser?.role === 'admin') {
       navigate('/admin');
+      return;
     }
     
     // For schools, redirect to the school dashboard
@@ -43,9 +44,9 @@ const Index = () => {
     }
   }, [currentUser, navigate]);
   
-  // If user is a school, don't render athlete dashboard content
+  // If user is a school, don't render athlete dashboard content while redirecting
   if (isSchool) {
-    return null; // This prevents rendering athlete content while redirecting
+    return null;
   }
   
   return (
