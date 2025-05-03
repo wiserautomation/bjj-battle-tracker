@@ -1,4 +1,3 @@
-
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -39,12 +38,13 @@ const Index = () => {
     
     // For schools, redirect to the school dashboard
     if (currentUser?.role === 'school') {
-      navigate('/school-dashboard');
+      console.log("Redirecting school user to school dashboard");
+      navigate('/school-dashboard', { replace: true });
       return;
     }
   }, [currentUser, navigate]);
   
-  // If user is a school, don't render athlete dashboard content while redirecting
+  // Return null during redirecting to prevent flash of content
   if (isSchool) {
     return null;
   }

@@ -104,6 +104,7 @@ const AuthPage = () => {
         if (userData?.user) {
           const metadata = userData.user.user_metadata;
           
+          // Ensure role is correctly extracted from metadata
           const role = metadata?.role || "athlete";
           
           const user: User = {
@@ -123,9 +124,9 @@ const AuthPage = () => {
           });
           
           // Make sure to explicitly redirect based on role
-          console.log("Redirecting based on role:", role);
+          console.log("User role:", role);
           if (role === "school") {
-            navigate("/school-dashboard");
+            navigate("/school-dashboard", { replace: true });
           } else if (role === "admin") {
             navigate("/admin");
           } else {
