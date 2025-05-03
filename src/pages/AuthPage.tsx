@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,8 +66,12 @@ const AuthPage = () => {
           description: `Welcome to JU-PLAY, ${name}!`,
         });
         
-        // Redirect to dashboard after successful signup
-        navigate("/dashboard");
+        // Redirect based on role
+        if (accountType === "school") {
+          navigate("/school-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       }
     } catch (error: any) {
       toast({
@@ -117,8 +120,14 @@ const AuthPage = () => {
             description: `Welcome back, ${metadata?.name || "User"}!`,
           });
           
-          // Redirect to dashboard after login
-          navigate("/dashboard");
+          // Redirect based on role
+          if (metadata?.role === "school") {
+            navigate("/school-dashboard");
+          } else if (metadata?.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/dashboard");
+          }
         }
       }
     } catch (error: any) {

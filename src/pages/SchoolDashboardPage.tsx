@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Plus, Trophy, MessageSquare, Calendar as CalendarIcon, Settings, Bell } from "lucide-react";
 import { useApp } from "@/context/AppContext";
@@ -76,6 +75,13 @@ const SchoolDashboardPage = () => {
     }
   ]);
   const { toast } = useToast();
+  
+  // Early check to redirect non-school users
+  useEffect(() => {
+    if (currentUser && currentUser.role !== 'school') {
+      navigate('/dashboard');
+    }
+  }, [currentUser]);
   
   if (!currentUser || currentUser.role !== 'school') {
     return (

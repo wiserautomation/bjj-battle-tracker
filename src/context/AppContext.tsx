@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Athlete, Badge, Challenge, ChallengeResult, JournalEntry, School, User } from '../types';
 import { mockDataService } from '../services/mockData';
@@ -63,16 +62,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
             // Extract relevant user information from metadata
             const metadata = userData.user.user_metadata;
             
+            // Ensure role is properly set
+            const role = metadata?.role || "athlete";
+            
             // Create user object with data from Supabase
             const user: User = {
               id: userData.user.id,
               name: metadata?.name || "Unknown User",
               email: userData.user.email || "",
-              role: metadata?.role || "athlete",
+              role: role,
               profilePicture: metadata?.avatar_url || "/placeholder.svg",
               schoolId: metadata?.schoolId || null
             };
             
+            console.log("User authenticated:", user);
             setCurrentUser(user);
           }
         } else {
@@ -101,15 +104,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
           if (userData?.user) {
             const metadata = userData.user.user_metadata;
             
+            const role = metadata?.role || "athlete";
+            
             const user: User = {
               id: userData.user.id,
               name: metadata?.name || "Unknown User",
               email: userData.user.email || "",
-              role: metadata?.role || "athlete",
+              role: role,
               profilePicture: metadata?.avatar_url || "/placeholder.svg",
               schoolId: metadata?.schoolId || null
             };
             
+            console.log("Auth state changed:", user);
             setCurrentUser(user);
           }
         } else if (event === 'SIGNED_OUT') {

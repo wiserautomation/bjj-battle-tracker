@@ -19,6 +19,7 @@ const Index = () => {
   const navigate = useNavigate();
   
   const isAthlete = currentUser?.role === 'athlete';
+  const isSchool = currentUser?.role === 'school';
   const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
   
   // Metrics should be zero until user joins a school
@@ -38,8 +39,14 @@ const Index = () => {
     // For schools, redirect to the school dashboard
     if (currentUser?.role === 'school') {
       navigate('/school-dashboard');
+      return;
     }
   }, [currentUser, navigate]);
+  
+  // If user is a school, don't render athlete dashboard content
+  if (isSchool) {
+    return null; // This prevents rendering athlete content while redirecting
+  }
   
   return (
     <MainLayout>
