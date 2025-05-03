@@ -19,7 +19,7 @@ import SchoolDashboardPage from "./pages/SchoolDashboardPage";
 import SchoolBillingPage from "./pages/SchoolBillingPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 // Create a single queryClient instance with default options
 const queryClient = new QueryClient({
@@ -35,7 +35,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <TooltipProvider delayDuration={300}>
+        <TooltipPrimitive.Provider delayDuration={300}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
@@ -56,7 +56,7 @@ const App = () => {
             <Toaster />
             <Sonner />
           </BrowserRouter>
-        </TooltipProvider>
+        </TooltipPrimitive.Provider>
       </AppProvider>
     </QueryClientProvider>
   );
