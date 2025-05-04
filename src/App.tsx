@@ -35,6 +35,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
+        {/* Wrap the entire app with a single TooltipProvider */}
         <TooltipProvider>
           <BrowserRouter>
             <Routes>
