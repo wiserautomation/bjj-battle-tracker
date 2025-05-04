@@ -34,8 +34,8 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider delayDuration={300}>
-        <AppProvider>
+      <AppProvider>
+        <TooltipProvider>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
@@ -56,8 +56,8 @@ const App = () => {
             <Toaster />
             <Sonner />
           </BrowserRouter>
-        </AppProvider>
-      </TooltipProvider>
+        </TooltipProvider>
+      </AppProvider>
     </QueryClientProvider>
   );
 };
