@@ -269,7 +269,7 @@ const ProfilePage = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {(user as School).athletes.length === 0 ? (
+                        {!user || !(user as School).athletes || (user as School).athletes.length === 0 ? (
                           <p className="text-center text-muted-foreground py-4">
                             No athletes have joined your school yet.
                           </p>
