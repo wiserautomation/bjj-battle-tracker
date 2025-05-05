@@ -128,9 +128,7 @@ const SchoolEnrollment = () => {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                if (e.target.value) {
-                  setIsSearching(true);
-                }
+                setIsSearching(true);
               }}
               autoFocus
             />

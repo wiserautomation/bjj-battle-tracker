@@ -1,3 +1,4 @@
+
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -113,7 +114,7 @@ const Index = () => {
         
         {isAthlete ? (
           hasJoinedSchool ? (
-            <Tabs defaultValue="rankings" className="space-y-4">
+            <Tabs defaultValue="challenges" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="rankings">Rankings</TabsTrigger>
                 <TabsTrigger value="challenges">Challenges</TabsTrigger>
@@ -126,9 +127,13 @@ const Index = () => {
                     <CardTitle>School Rankings</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-center text-muted-foreground py-4">
-                      Complete challenges to earn points and improve your ranking.
-                    </p>
+                    {hasJoinedSchool ? (
+                      <p>Ranking information will display here after you complete challenges.</p>
+                    ) : (
+                      <p className="text-center text-muted-foreground py-4">
+                        Join a school to see rankings.
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
