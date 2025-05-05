@@ -26,6 +26,12 @@ const AppSidebar = () => {
   const isAthlete = currentUser.role === 'athlete';
   const user = currentUser as (Athlete | School);
   
+  // Get safe belt name with fallback for undefined belt
+  const getBeltDisplayName = (athlete: Athlete) => {
+    if (!athlete.belt) return "No Belt";
+    return `${athlete.belt.charAt(0).toUpperCase() + athlete.belt.slice(1)} Belt`;
+  };
+  
   return (
     <Sidebar>
       <SidebarHeader className="flex flex-col items-center p-4 gap-2 text-center">
@@ -37,12 +43,12 @@ const AppSidebar = () => {
         </Avatar>
         <div>
           <h2 className="text-xl font-bold">{user.name}</h2>
-          {isAthlete && (
+          {isAthlete && (user as Athlete).belt && (
             <div className="flex items-center justify-center gap-1 mt-1">
               <span className={`inline-block px-3 py-1 rounded belt-${(user as Athlete).belt}`}>
-                {`${(user as Athlete).belt.charAt(0).toUpperCase() + (user as Athlete).belt.slice(1)} Belt`}
+                {getBeltDisplayName(user as Athlete)}
               </span>
-              {Array.from({ length: (user as Athlete).stripes }).map((_, i) => (
+              {Array.from({ length: (user as Athlete).stripes || 0 }).map((_, i) => (
                 <span key={i} className="inline-block h-2 w-2 bg-bjj-gold rounded-full"></span>
               ))}
             </div>

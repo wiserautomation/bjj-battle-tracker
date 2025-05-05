@@ -47,6 +47,8 @@ const Header = () => {
   // Check if user is an athlete to access belt color
   const isAthlete = currentUser.role === 'athlete';
   const athlete = isAthlete ? (currentUser as Athlete) : null;
+  // Only apply belt color class if belt exists
+  const beltColorClass = athlete && athlete.belt ? `bg-bjj-${athlete.belt}` : undefined;
   
   return (
     <header className="h-16 border-b flex items-center justify-between px-4 bg-card">
@@ -66,7 +68,7 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={currentUser.profilePicture} />
-                <AvatarFallback className={athlete && athlete.belt ? `bg-bjj-${athlete.belt}` : undefined}>
+                <AvatarFallback className={beltColorClass}>
                   {userInitials}
                 </AvatarFallback>
               </Avatar>

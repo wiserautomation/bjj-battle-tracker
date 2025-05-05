@@ -29,8 +29,14 @@ const AthletesPage = () => {
   // Filter athletes by search term
   const filteredAthletes = athletes.filter(
     athlete => athlete.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-               athlete.belt.toLowerCase().includes(searchTerm.toLowerCase())
+               (athlete.belt && athlete.belt.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+  
+  // Helper function for displaying belt information
+  const getBeltDisplay = (beltName: string | undefined) => {
+    if (!beltName) return "No Belt";
+    return beltName.charAt(0).toUpperCase() + beltName.slice(1);
+  };
   
   return (
     <MainLayout>
@@ -69,8 +75,14 @@ const AthletesPage = () => {
                     <div>
                       <CardTitle>{athlete.name}</CardTitle>
                       <CardDescription>
-                        {athlete.belt.charAt(0).toUpperCase() + athlete.belt.slice(1)} Belt
-                        {athlete.stripes > 0 && ` • ${athlete.stripes} Stripe${athlete.stripes > 1 ? 's' : ''}`}
+                        {athlete.belt ? (
+                          <>
+                            {getBeltDisplay(athlete.belt)} Belt
+                            {athlete.stripes > 0 && ` • ${athlete.stripes} Stripe${athlete.stripes > 1 ? 's' : ''}`}
+                          </>
+                        ) : (
+                          "No Belt"
+                        )}
                       </CardDescription>
                     </div>
                   </div>
