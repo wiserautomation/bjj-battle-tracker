@@ -10,9 +10,5 @@ if (!rootElement) throw new Error("Root element not found");
 
 const root = createRoot(rootElement);
 
-// Render the App without StrictMode to avoid double-mounting components
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Render the App without additional StrictMode as it's now in App.tsx
+root.render(<App />);
