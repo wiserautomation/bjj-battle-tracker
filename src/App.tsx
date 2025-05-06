@@ -36,8 +36,8 @@ const App = () => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <TooltipProvider>
-            <AppProvider>
+          <AppProvider>
+            <TooltipProvider>
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<AuthPage />} />
@@ -56,8 +56,8 @@ const App = () => {
               </Routes>
               <Toaster />
               <Sonner />
-            </AppProvider>
-          </TooltipProvider>
+            </TooltipProvider>
+          </AppProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>

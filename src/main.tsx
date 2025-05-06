@@ -4,15 +4,12 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Create root once with nullish coalescing for safety
+// Get the root element
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");
 
+// Create root once
 const root = createRoot(rootElement);
 
-// Render the App directly
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Render the App directly without nested StrictMode since App.tsx already has it
+root.render(<App />);
