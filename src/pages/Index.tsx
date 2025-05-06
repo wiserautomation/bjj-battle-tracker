@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 const Index = () => {
   const { currentUser, hasSchool } = useApp();
@@ -55,7 +56,7 @@ const Index = () => {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-1">
-            Welcome to JU-PLAY{currentUser ? `, ${currentUser.name}` : ''}
+            Welcome to JU-PLAY{currentUser?.name ? `, ${currentUser.name}` : ''}
           </h1>
           {isAthlete && (
             <p className="text-muted-foreground">
@@ -67,7 +68,32 @@ const Index = () => {
         </div>
         
         {isAthlete && !hasJoinedSchool && (
-          <SchoolEnrollment />
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  Find Your School
+                </CardTitle>
+                <CardDescription>
+                  Search for your Brazilian Jiu-Jitsu school to access all features
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4">
+                  <Badge variant="outline" className="mb-2">Important</Badge>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    You need to join a school to access features like:
+                  </p>
+                  <ul className="list-disc pl-5 text-sm text-muted-foreground">
+                    <li>Challenges and competitions</li>
+                    <li>Progress tracking</li>
+                    <li>Rankings and achievements</li>
+                  </ul>
+                </div>
+                <SchoolEnrollment />
+              </CardContent>
+            </Card>
+          </div>
         )}
         
         {(isAthlete && hasJoinedSchool) && (
@@ -149,19 +175,7 @@ const Index = () => {
                 </div>
               </TabsContent>
             </Tabs>
-          ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>Getting Started</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>To access all features like challenges, rankings, and journal tracking, please join a school first.</p>
-                <Button asChild variant="default">
-                  <Link to="/dashboard">Join a School</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          )
+          ) : null
         ) : null}
       </div>
     </MainLayout>

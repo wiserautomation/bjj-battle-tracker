@@ -14,7 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 const SchoolEnrollment = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(true);
   const [nearbySchools, setNearbySchools] = useState<School[]>([]);
   const [isJoining, setIsJoining] = useState(false);
   const [joiningSchoolId, setJoiningSchoolId] = useState<string | null>(null);
@@ -111,59 +111,50 @@ const SchoolEnrollment = () => {
   );
   
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Join a School</CardTitle>
-        <CardDescription>
-          To access all features, find and join a Brazilian Jiu-Jitsu school.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search schools by name or location..." 
-              className="pl-10"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setIsSearching(true);
-              }}
-              autoFocus
-            />
-          </div>
-          
-          {isSearching || searchTerm ? (
-            <div className="space-y-3 mt-4">
-              {filteredSchools.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">No schools found matching your search.</p>
-              ) : (
-                filteredSchools.map(renderSchoolItem)
-              )}
-            </div>
+    <div className="space-y-4">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search schools by name or location..." 
+          className="pl-10"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setIsSearching(true);
+          }}
+          autoFocus
+        />
+      </div>
+      
+      {isSearching || searchTerm ? (
+        <div className="space-y-3 mt-4">
+          {filteredSchools.length === 0 ? (
+            <p className="text-center text-muted-foreground py-4">No schools found matching your search.</p>
           ) : (
-            <div className="space-y-3 mt-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-sm font-medium text-muted-foreground">Nearby Schools</h3>
-                <Badge variant="outline" className="text-xs">Based on your location</Badge>
-              </div>
-              {nearbySchools.length > 0 ? (
-                nearbySchools.map(renderSchoolItem)
-              ) : (
-                <p className="text-center text-muted-foreground py-4">No nearby schools found.</p>
-              )}
-            </div>
+            filteredSchools.map(renderSchoolItem)
           )}
-          
-          <div className="pt-2 text-center">
-            <p className="text-sm text-muted-foreground">
-              Can't find your school? Contact them to join the JU-PLAY platform.
-            </p>
-          </div>
         </div>
-      </CardContent>
-      <CardFooter className="flex justify-center border-t pt-4">
+      ) : (
+        <div className="space-y-3 mt-4">
+          <div className="flex justify-between items-center">
+            <h3 className="text-sm font-medium text-muted-foreground">Nearby Schools</h3>
+            <Badge variant="outline" className="text-xs">Based on your location</Badge>
+          </div>
+          {nearbySchools.length > 0 ? (
+            nearbySchools.map(renderSchoolItem)
+          ) : (
+            <p className="text-center text-muted-foreground py-4">No nearby schools found.</p>
+          )}
+        </div>
+      )}
+      
+      <div className="pt-2 text-center">
+        <p className="text-sm text-muted-foreground">
+          Can't find your school? Contact them to join the JU-PLAY platform.
+        </p>
+      </div>
+      
+      <div className="flex justify-center">
         <Button 
           variant="outline" 
           size={isMobile ? "sm" : "default"} 
@@ -171,8 +162,8 @@ const SchoolEnrollment = () => {
         >
           {isSearching ? "Show Nearby Schools" : "Search All Schools"}
         </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 

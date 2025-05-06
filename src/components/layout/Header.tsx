@@ -40,7 +40,8 @@ const Header = () => {
     }
   };
   
-  const userInitials = currentUser.name
+  // Get user initials from actual user name, safely handle undefined case
+  const userInitials = currentUser?.name
     ? currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase()
     : 'U';
   
@@ -68,7 +69,7 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={currentUser.profilePicture} />
-                <AvatarFallback className={beltColorClass}>
+                <AvatarFallback className={beltColorClass || undefined}>
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
@@ -76,7 +77,10 @@ const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel>
-              {currentUser.name}
+              {currentUser.name || "User"}
+              <p className="text-xs font-normal text-muted-foreground">
+                {currentUser.email}
+              </p>
               <p className="text-xs font-normal text-muted-foreground">
                 {currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}
               </p>
