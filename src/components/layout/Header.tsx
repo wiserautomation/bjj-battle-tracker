@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useApp } from "@/context/AppContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, User, LogOut } from "lucide-react";
+import { Bell, User, LogOut, Search } from "lucide-react";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -17,11 +17,14 @@ import { useToast } from "@/hooks/use-toast";
 import { Athlete } from "@/types";
 
 const Header = () => {
-  const { currentUser, logout } = useApp();
+  const { currentUser, logout, hasSchool } = useApp();
   const { toast } = useToast();
   const navigate = useNavigate();
   
   if (!currentUser) return null;
+  
+  const isAthlete = currentUser.role === 'athlete';
+  const hasJoinedSchool = isAthlete && currentUser && hasSchool(currentUser.id);
 
   const handleSignOut = async () => {
     try {
@@ -46,7 +49,6 @@ const Header = () => {
     : 'U';
   
   // Check if user is an athlete to access belt color
-  const isAthlete = currentUser.role === 'athlete';
   const athlete = isAthlete ? (currentUser as Athlete) : null;
   // Only apply belt color class if belt exists
   const beltColorClass = athlete && athlete.belt ? `bg-bjj-${athlete.belt}` : undefined;
@@ -60,6 +62,18 @@ const Header = () => {
       </div>
       
       <div className="flex items-center gap-3">
+        {isAthlete && !hasJoinedSchool && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-2 hidden md:flex"
+            onClick={() => navigate('/dashboard')}
+          >
+            <Search className="h-4 w-4" />
+            Find a School
+          </Button>
+        )}
+        
         <Button variant="outline" size="icon">
           <Bell className="h-5 w-5" />
         </Button>
@@ -93,6 +107,14 @@ const Header = () => {
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
+              {isAthlete && !hasJoinedSchool && (
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard">
+                    <Search className="mr-2 h-4 w-4" />
+                    <span>Find a School</span>
+                  </Link>
+                </DropdownMenuItem>
+              )}
               {currentUser.role === 'school' && (
                 <DropdownMenuItem asChild>
                   <Link to="/school-dashboard">

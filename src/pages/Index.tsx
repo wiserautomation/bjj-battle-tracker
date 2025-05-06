@@ -1,15 +1,15 @@
 
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Trophy, Award, Calendar, Notebook, MessageSquare, Bell, Search, School } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import ChallengesList from "@/components/challenges/ChallengesList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentJournalEntries from "@/components/dashboard/RecentJournalEntries";
 import AchievementsList from "@/components/dashboard/AchievementsList";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 const Index = () => {
   const { currentUser, hasSchool } = useApp();
   const navigate = useNavigate();
+  const [showSchoolSearch, setShowSchoolSearch] = useState(false);
   
   const isAthlete = currentUser?.role === 'athlete';
   const isSchool = currentUser?.role === 'school';
@@ -67,16 +68,59 @@ const Index = () => {
           )}
         </div>
         
-        {isAthlete && !hasJoinedSchool && (
+        {isAthlete && !hasJoinedSchool && !showSchoolSearch && (
           <div className="space-y-4">
-            <Card>
+            <Card className="border-2 border-dashed border-primary/50">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
+                  <School className="h-5 w-5" />
                   Find Your School
                 </CardTitle>
                 <CardDescription>
-                  Search for your Brazilian Jiu-Jitsu school to access all features
+                  You need to join a Brazilian Jiu-Jitsu school to access all features
                 </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Search for your school to access features like challenges, progress tracking, and rankings.
+                  </p>
+                  <Button 
+                    onClick={() => setShowSchoolSearch(true)}
+                    size="lg"
+                    className="gap-2"
+                  >
+                    <Search className="h-4 w-4" />
+                    Find and Join a School
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+        
+        {isAthlete && !hasJoinedSchool && showSchoolSearch && (
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <School className="h-5 w-5" />
+                      Find Your School
+                    </CardTitle>
+                    <CardDescription>
+                      Search for your Brazilian Jiu-Jitsu school to access all features
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setShowSchoolSearch(false)}
+                  >
+                    Hide Search
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
