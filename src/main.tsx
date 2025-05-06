@@ -8,8 +8,12 @@ import './index.css';
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");
 
-// Create root once
+// Create root instance
 const root = createRoot(rootElement);
 
-// Render the App directly without nested StrictMode since App.tsx already has it
-root.render(<App />);
+// Render the App component
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
