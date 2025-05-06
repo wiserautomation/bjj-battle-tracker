@@ -5,7 +5,6 @@ import AppSidebar from "./AppSidebar";
 import Header from "./Header";
 import { useApp } from "@/context/AppContext";
 import { useIsMobile, useIsNativeApp } from "@/hooks/use-mobile";
-import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -29,17 +28,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <SidebarProvider>
-      <TooltipProvider>
-        <div className="min-h-screen flex w-full">
-          <AppSidebar />
-          <div className="flex-1 flex flex-col">
-            <Header />
-            <main className={`flex-1 p-4 ${isMobile ? "pb-16" : ""} overflow-auto`}>
-              {children}
-            </main>
-          </div>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <main className={`flex-1 p-4 ${isMobile ? "pb-16" : ""} overflow-auto`}>
+            {children}
+          </main>
         </div>
-      </TooltipProvider>
+      </div>
     </SidebarProvider>
   );
 };
