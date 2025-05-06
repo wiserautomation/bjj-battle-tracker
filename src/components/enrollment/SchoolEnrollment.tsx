@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const SchoolEnrollment = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,27 +84,21 @@ const SchoolEnrollment = () => {
         </div>
       </div>
       <div>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              size="sm" 
-              onClick={() => handleJoinSchool(school.id)}
-              disabled={isJoining}
-            >
-              {isJoining && joiningSchoolId === school.id ? (
-                <>Joining...</>
-              ) : (
-                <>
-                  <CheckCircle className="mr-1 h-4 w-4" />
-                  Join
-                </>
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Send a request to join this school</p>
-          </TooltipContent>
-        </Tooltip>
+        <Button 
+          size="sm"
+          onClick={() => handleJoinSchool(school.id)}
+          disabled={isJoining}
+          title="Send a request to join this school"
+        >
+          {isJoining && joiningSchoolId === school.id ? (
+            <>Joining...</>
+          ) : (
+            <>
+              <CheckCircle className="mr-1 h-4 w-4" />
+              Join
+            </>
+          )}
+        </Button>
       </div>
     </div>
   );
