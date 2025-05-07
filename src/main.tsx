@@ -13,5 +13,7 @@ const root = createRoot(rootElement);
 
 // Render the App component
 root.render(
-  <App />
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );
