@@ -1,4 +1,5 @@
-
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "@/components/layout/MainLayout";
 import { useApp } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -9,8 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentJournalEntries from "@/components/dashboard/RecentJournalEntries";
 import AchievementsList from "@/components/dashboard/AchievementsList";
 import SchoolEnrollment from "@/components/enrollment/SchoolEnrollment";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
